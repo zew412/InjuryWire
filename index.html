@@ -1788,7 +1788,9 @@ async function loadFromAPI(silent = false) {
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    console.log('API response:', JSON.stringify(data).slice(0, 500));
     const mapped = (data.injuries || []).map((r, i) => mapApiReport(r, i));
+    console.log('Mapped reports:', mapped.length);
     if (mapped.length) {
       const existingIds = new Set(allReports.map(r => r.source_id));
       mapped.forEach(r => {
@@ -1808,9 +1810,9 @@ async function loadFromAPI(silent = false) {
     buildTicker();
     applyFilters();
   } catch (err) {
-    console.error('API error:', err);
+    console.error('API error:', err.message, err);
     setApiStatus('error', 'API ERROR');
-    if (allReports.length === 0) loadMockData();
+    loadMockData();
   }
 }
 
