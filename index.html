@@ -1230,14 +1230,16 @@ header {
 }
 .reset-filters-link:hover { opacity: 1; }
 
-/* ── NAV BUTTON (between pages) ── */
+/* ── PAGE NAV TABS ── */
+.page-nav { display: flex; gap: 3px; margin-left: 8px; }
 .header-nav-btn {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
   color: var(--muted); text-decoration: none;
-  border: 1px solid var(--border2); padding: 4px 12px; border-radius: 3px;
-  transition: color 0.12s, border-color 0.12s;
+  border: 1px solid var(--border2); padding: 5px 14px; border-radius: 3px;
+  transition: color 0.12s, border-color 0.12s, background 0.12s; white-space: nowrap;
 }
-.header-nav-btn:hover { color: var(--accent); border-color: rgba(0,200,255,0.3); }
+.header-nav-btn:hover { color: var(--text2); border-color: var(--border2); background: var(--surface2); }
+.header-nav-btn.active { color: var(--accent); border-color: rgba(0,200,255,0.3); background: var(--accent-dim); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
@@ -1275,6 +1277,10 @@ header {
     <span class="logo-text">INJURYWIRE</span>
     <span class="logo-badge">NBA · BETA</span>
   </div>
+  <nav class="page-nav">
+    <a class="header-nav-btn active" href="index.html?v=2">LIVE FEED</a>
+    <a class="header-nav-btn" href="history.html?v=2">PLAYERS DATABASE</a>
+  </nav>
   <div class="header-center">
     <div class="search-wrap-header">
       <span class="search-icon-header">⌕</span>
@@ -1282,7 +1288,6 @@ header {
     </div>
   </div>
   <div class="header-right">
-    <a href="history.html?v=2" class="header-nav-btn">HISTORICAL</a>
     <div class="live-badge">
       <div class="live-dot"></div>
       <span id="monitor-count">213</span> MONITORED
