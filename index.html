@@ -761,251 +761,27 @@ header {
 
 /* ── CORROBORATION ── */
 .corroboration {
-  margin-top: 10px;
-  border: 1px solid rgba(0,200,255,0.12);
-  border-radius: 6px;
-  background: rgba(0,200,255,0.03);
-  overflow: hidden;
-}
-.corr-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  cursor: pointer;
-  user-select: none;
-}
-.corr-header:hover { background: rgba(0,200,255,0.04); }
-.corr-badge {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  color: var(--accent);
-  background: rgba(0,200,255,0.1);
-  border: 1px solid rgba(0,200,255,0.25);
-  padding: 2px 7px;
-  border-radius: 2px;
-}
-.corr-names {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--text2);
-  flex: 1;
-}
-.corr-chevron {
-  font-size: 9px;
-  color: var(--muted);
-  transition: transform 0.2s;
-}
-.corroboration.open .corr-chevron { transform: rotate(180deg); }
-.corr-tweets {
-  display: none;
-  border-top: 1px solid rgba(0,200,255,0.1);
-}
-.corroboration.open .corr-tweets { display: block; }
-.corr-tweet-row {
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-}
-.corr-tweet-row:last-child { border-bottom: none; }
-.corr-tweet-avatar {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--surface3);
-  border: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-size: 7px; color: var(--muted);
-  flex-shrink: 0;
-}
-.corr-tweet-body { flex: 1; min-width: 0; }
-.corr-tweet-meta {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--accent);
-  margin-bottom: 3px;
-  display: flex; align-items: center; gap: 6px;
-}
-.corr-tweet-text {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--text2);
-  line-height: 1.4;
-  font-style: italic;
-}
-
-/* ── PLAYER NAME (clickable) ── */
-.player-name-link {
-  cursor: pointer;
-  transition: color 0.12s;
-  display: inline-block;
-}
-.player-name-link:hover { color: var(--accent); }
-
-/* ── PLAYER HISTORY MODAL ── */
-.player-history-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 600;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-}
-.player-history-overlay.open { display: flex; }
-.player-history-modal {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 12px;
-  width: 640px;
-  max-width: 95vw;
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
-  overflow: hidden;
-}
-.phm-header {
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-shrink: 0;
-}
-.phm-player {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 24px;
-  letter-spacing: 1px;
-  color: var(--text);
-  line-height: 1;
-}
-.phm-team {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 1px;
-  margin-top: 3px;
-}
-.phm-close {
-  margin-left: auto;
-  background: none;
-  border: 1px solid var(--border2);
-  border-radius: 4px;
-  padding: 5px 10px;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: all 0.12s;
-}
-.phm-close:hover { border-color: var(--accent); color: var(--accent); }
-.phm-body { overflow-y: auto; flex: 1; padding: 0; }
-.phm-tweet {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
-  animation: card-in 0.2s ease both;
-}
-.phm-tweet-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  flex-wrap: wrap;
-}
-.phm-tweet-text {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.55;
-  font-style: italic;
-}
-.phm-tweet-footer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-top: 8px;
-}
-.phm-empty {
-  padding: 40px 20px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-}
-
-/* ── TEAM PLAYER DROPDOWN ── */
-.team-players {
-  display: none;
-  padding: 0 0 4px 24px;
-  border-left: 2px solid rgba(0,200,255,0.15);
-  margin: 0 16px 4px;
-}
-.team-btn.active + .team-players,
-.team-players.show { display: block; }
-.player-filter-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  width: 100%;
-  padding: 4px 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--muted);
-  font-family: var(--font-body);
-  font-size: 11px;
-  text-align: left;
-  border-radius: 3px;
-  transition: all 0.1s;
+  flex-wrap: wrap;
 }
-.player-filter-btn:hover { background: var(--surface2); color: var(--text2); }
-.player-filter-btn.active { color: var(--accent); background: var(--accent-dim); }
-.player-status-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.player-filter-count {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--muted);
-}
-
-/* ── TWEET LINK BUTTON ── */
-.tweet-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.corr-label {
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--muted);
-  text-decoration: none;
-  border: 1px solid var(--border2);
-  padding: 2px 8px;
-  border-radius: 2px;
-  transition: all 0.12s;
-  margin-left: auto;
-  flex-shrink: 0;
+  letter-spacing: 1px;
 }
-.tweet-link:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── CONFIDENCE BREAKDOWN IMPROVED ── */
-.conf-factor {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
+.corr-source {
   font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--muted);
-  line-height: 2;
+  font-size: 9px;
+  color: var(--text2);
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  padding: 1px 7px;
+  border-radius: 2px;
 }
-.conf-factor span { color: var(--text2); }
 
 /* ── RIGHT SIDEBAR ── */
 .sidebar-right {
@@ -1075,7 +851,7 @@ header {
   opacity: 0;
   transition: opacity 0.15s ease;
 }
-.rep-hover-card.visible { opacity: 1; }
+.rep-hover-card.visible { opacity: 1; pointer-events: auto; }
 .rhc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .rhc-avatar {
   width: 36px; height: 36px; border-radius: 50%;
@@ -1392,6 +1168,66 @@ header {
   margin: 0 auto 16px;
 }
 
+/* ── NEW BADGE COUNTDOWN ── */
+.new-countdown {
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--pink); opacity: 0.85; letter-spacing: 0.5px;
+}
+
+/* ── TWEET X LINK ── */
+.tweet-x-link {
+  margin-left: auto; color: var(--text2);
+  text-decoration: none; font-size: 11px; font-weight: 700;
+  line-height: 1; padding: 3px 5px; border-radius: 3px;
+  transition: color 0.12s, background 0.12s; flex-shrink: 0;
+}
+.tweet-x-link:hover { color: var(--accent); background: rgba(255,255,255,0.05); }
+
+/* ── REPORTER HOVER CARD X LINK ── */
+.rhc-x-link {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border2);
+  color: var(--text2); font-size: 10px; font-weight: 700;
+  text-decoration: none; flex-shrink: 0; margin-left: auto;
+  transition: background 0.12s, color 0.12s;
+}
+.rhc-x-link:hover { background: rgba(255,255,255,0.12); color: var(--accent); }
+
+/* ── REPORTER PROFILE X LINK ── */
+.rvi-x-link {
+  color: var(--accent); text-decoration: none; opacity: 0.8;
+  border-bottom: 1px dotted rgba(0,200,255,0.4); transition: opacity 0.12s;
+}
+.rvi-x-link:hover { opacity: 1; }
+
+/* ── PLAYER FILTER (separate class from .team-btn to avoid selector conflicts) ── */
+.player-filter-wrap { padding: 0 0 4px; }
+.player-filter-label {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 2px;
+  color: var(--muted); padding: 10px 16px 4px; display: block; text-transform: uppercase;
+}
+.player-btn {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 5px 16px; background: none; border: none;
+  border-left: 2px solid transparent; color: var(--muted);
+  font-family: var(--font-mono); font-size: 10px;
+  text-align: left; cursor: pointer; transition: all 0.12s;
+}
+.player-btn:hover { background: var(--surface2); color: var(--text2); }
+.player-btn.active { background: var(--accent-dim); color: var(--text); border-left-color: var(--accent); }
+
+/* ── RESET FILTERS LINK ── */
+.teams-label-row {
+  display: flex; align-items: center; justify-content: space-between; padding-right: 12px;
+}
+.reset-filters-link {
+  font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+  background: none; border: none; cursor: pointer; padding: 0;
+  transition: color 0.12s;
+}
+.reset-filters-link:hover { color: var(--accent); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
   .layout { grid-template-columns: 200px 1fr 240px; }
@@ -1417,20 +1253,6 @@ header {
 </style>
 </head>
 <body>
-
-<!-- PLAYER HISTORY MODAL -->
-<div class="player-history-overlay" id="player-history-overlay" onclick="closePlayerHistory(event)">
-  <div class="player-history-modal" onclick="event.stopPropagation()">
-    <div class="phm-header">
-      <div>
-        <div class="phm-player" id="phm-player-name">PLAYER</div>
-        <div class="phm-team" id="phm-player-team">TEAM</div>
-      </div>
-      <button class="phm-close" onclick="closePlayerHistory()">✕ CLOSE</button>
-    </div>
-    <div class="phm-body" id="phm-body"></div>
-  </div>
-</div>
 
 <!-- REPORTER HOVER CARD -->
 <div class="rep-hover-card" id="rep-hover-card"></div>
@@ -1480,7 +1302,10 @@ header {
     </div>
 
     <div class="sl-section">
-      <div class="sl-label">STATUS</div>
+      <div class="teams-label-row">
+        <div class="sl-label">STATUS</div>
+        <button class="reset-filters-link" onclick="resetFilters()" title="Reset all filters">↺ reset</button>
+      </div>
       <div id="status-filters">
         <button class="filter-btn active" data-status="all" onclick="filterStatus('all', this)">
           <span class="filter-dot" style="background:var(--text)"></span> All Reports
@@ -1514,6 +1339,10 @@ header {
     <div class="sl-section">
       <div class="sl-label">TEAMS <span id="team-count-label">30</span></div>
       <div id="team-list"></div>
+      <div id="player-filter-wrap" style="display:none" class="player-filter-wrap">
+        <span class="player-filter-label">PLAYERS</span>
+        <div id="player-list"></div>
+      </div>
     </div>
   </div>
 
@@ -1653,47 +1482,6 @@ header {
 // ─── REPORTER DATABASE (from CSV) ─────────────────────────────────────────────
 const REPORTERS = [{"name":"Kevin Chouinard","handle":"@KLChouinard","outlet":"Hawks.com / Zone Coverage","team":"Atlanta Hawks","tier":1,"signal":"High","followers":"28K","conf":"E","notes":"Primary beat; fastest on Hawks injury news; daily practice access"},{"name":"Lauren L. Williams","handle":"@williamslaurenl","outlet":"Atlanta Journal-Constitution","team":"Atlanta Hawks","tier":1,"signal":"High","followers":"22K","conf":"E","notes":"AJC beat; strong locker-room sourcing"},{"name":"Sarah K. Spencer","handle":"@sarah_k_spencer","outlet":"Atlanta Journal-Constitution","team":"Atlanta Hawks","tier":2,"signal":"Medium","followers":"18K","conf":"E","notes":"AJC co-beat; detailed practice notes"},{"name":"Chris Kirschner","handle":"@ChrisKirschner","outlet":"The Athletic","team":"Atlanta Hawks","tier":2,"signal":"High","followers":"58K","conf":"E","notes":"Covers Hawks for The Athletic; breaks news regularly"},{"name":"Quenton Albertie","handle":"@QuentonAlbertie","outlet":"Last Word On Sports","team":"Atlanta Hawks","tier":3,"signal":"Medium","followers":"8K","conf":"E","notes":"Credentialed Hawks media member; covers games regularly"},{"name":"Joe Barberio","handle":"@JoeBarberio","outlet":"FanDuel Sports Network SE","team":"Atlanta Hawks","tier":3,"signal":"Medium","followers":"12K","conf":"E","notes":"Local TV sideline; locker-room access"},{"name":"Jay King","handle":"@ByJayKing","outlet":"The Athletic","team":"Boston Celtics","tier":1,"signal":"High","followers":"98K","conf":"E","notes":"Premier Celtics beat; breaks injury news very fast"},{"name":"Chris Forsberg","handle":"@ChrisForsberg_","outlet":"NBC Sports Boston","team":"Boston Celtics","tier":1,"signal":"High","followers":"80K","conf":"E","notes":"Daily practice coverage; very detailed injury reporting"},{"name":"Gary Washburn","handle":"@GaryWashburn","outlet":"Boston Globe","team":"Boston Celtics","tier":1,"signal":"High","followers":"65K","conf":"E","notes":"Veteran Globe columnist; strong team sourcing"},{"name":"Adam Himmelsbach","handle":"@adamhimmelsbach","outlet":"Boston Globe","team":"Boston Celtics","tier":1,"signal":"High","followers":"48K","conf":"E","notes":"Globe beat writer; co-covers with Washburn"},{"name":"Brian Robb","handle":"@BrianTRobb","outlet":"MassLive","team":"Boston Celtics","tier":2,"signal":"Medium","followers":"40K","conf":"E","notes":"Daily Celtics coverage; good practice reports"},{"name":"John Karalis","handle":"@john_karalis","outlet":"WEEI / Red's Army","team":"Boston Celtics","tier":2,"signal":"Medium","followers":"30K","conf":"E","notes":"Strong Celtics sourcing; well-connected locally"},{"name":"A. Sherrod Blakely","handle":"@SherrodBlakely","outlet":"NBC Boston","team":"Boston Celtics","tier":2,"signal":"Medium","followers":"33K","conf":"E","notes":"Veteran Celtics voice; locker-room access"},{"name":"Tim Bontemps","handle":"@TimBontemps","outlet":"ESPN","team":"Boston Celtics","tier":2,"signal":"High","followers":"148K","conf":"E","notes":"ESPN national reporter; strong Celtics sourcing"},{"name":"Erik Slater","handle":"@erikslater_","outlet":"ClutchPoints","team":"Brooklyn Nets","tier":1,"signal":"High","followers":"38K","conf":"E","notes":"Most plugged-in Nets reporter; very fast on injuries"},{"name":"Alex Schiffer","handle":"@Alex__Schiffer","outlet":"The Athletic","team":"Brooklyn Nets","tier":1,"signal":"High","followers":"42K","conf":"E","notes":"The Athletic Nets beat; strong injury reporting"},{"name":"Brian Lewis","handle":"@NYPost_Lewis","outlet":"New York Post","team":"Brooklyn Nets","tier":1,"signal":"High","followers":"26K","conf":"E","notes":"NY Post Nets beat; locker-room access"},{"name":"Kristian Winfield","handle":"@Krisplashed","outlet":"NY Daily News","team":"Brooklyn Nets","tier":2,"signal":"High","followers":"50K","conf":"E","notes":"Covers both NY teams; fast on injury news"},{"name":"Ryan Rudominer","handle":"@RyanRudominer","outlet":"NetsDaily / FanSided","team":"Brooklyn Nets","tier":2,"signal":"Medium","followers":"16K","conf":"E","notes":"Active Nets digital coverage; credentialed"},{"name":"Ethan Sears","handle":"@EthanJSears","outlet":"New York Post","team":"Brooklyn Nets","tier":2,"signal":"Medium","followers":"20K","conf":"E","notes":"NY Post Nets contributor; regular coverage"},{"name":"Rod Boone","handle":"@rodboone","outlet":"The Athletic","team":"Charlotte Hornets","tier":1,"signal":"High","followers":"34K","conf":"E","notes":"Most connected Hornets reporter; primary beat"},{"name":"Rick Bonnell","handle":"@rick_bonnell","outlet":"Charlotte Observer","team":"Charlotte Hornets","tier":1,"signal":"High","followers":"30K","conf":"E","notes":"Decades on the Hornets beat; excellent sourcing"},{"name":"James Plowright","handle":"@british_buzz","outlet":"Locked On Hornets","team":"Charlotte Hornets","tier":2,"signal":"Medium","followers":"20K","conf":"E","notes":"Credentialed; active daily Hornets coverage"},{"name":"Wynton McLaurin","handle":"@WyntonMcLaurin","outlet":"WCCB Charlotte","team":"Charlotte Hornets","tier":2,"signal":"Medium","followers":"13K","conf":"E","notes":"Local TV; locker-room access"},{"name":"Mike Eisenberg","handle":"@MikeEisenberg_","outlet":"Hornets Beat","team":"Charlotte Hornets","tier":2,"signal":"Medium","followers":"11K","conf":"E","notes":"Regular credentialed Hornets digital coverage"},{"name":"Steve Reed","handle":"@SteveReedAP","outlet":"Associated Press","team":"Charlotte Hornets","tier":2,"signal":"High","followers":"15K","conf":"E","notes":"AP Charlotte-based reporter; covers Hornets regularly"},{"name":"KC Johnson","handle":"@KCJHoop","outlet":"Chicago Sports Network","team":"Chicago Bulls","tier":1,"signal":"High","followers":"65K","conf":"E","notes":"Dean of Bulls reporters; best injury source by far"},{"name":"Julia Poe","handle":"@byjuliapoe","outlet":"Chicago Tribune","team":"Chicago Bulls","tier":1,"signal":"High","followers":"38K","conf":"E","notes":"Tribune beat; active daily practice coverage"},{"name":"Colleen Kane","handle":"@colleenkaneCT","outlet":"Chicago Tribune","team":"Chicago Bulls","tier":2,"signal":"Medium","followers":"24K","conf":"E","notes":"Tribune co-beat; covers Bulls regularly"},{"name":"Rob Schaefer","handle":"@rob_schaef","outlet":"NBC Sports Chicago","team":"Chicago Bulls","tier":2,"signal":"High","followers":"30K","conf":"E","notes":"NBC Chicago Bulls reporter; strong locker-room access"},{"name":"Darnell Mayberry","handle":"@DarnellMayberry","outlet":"The Athletic","team":"Chicago Bulls","tier":2,"signal":"High","followers":"35K","conf":"E","notes":"The Athletic Bulls senior writer"},{"name":"Sam Smith","handle":"@SamSmithHoops","outlet":"Bulls.com","team":"Chicago Bulls","tier":2,"signal":"Medium","followers":"42K","conf":"E","notes":"Official team site contributor; insider access"},{"name":"Ben Pope","handle":"@BenPopeCST","outlet":"Chicago Sun-Times","team":"Chicago Bulls","tier":2,"signal":"Medium","followers":"18K","conf":"E","notes":"Sun-Times Bulls coverage"},{"name":"Chris Fedor","handle":"@ChrisFedor","outlet":"Cleveland Plain Dealer","team":"Cleveland Cavaliers","tier":1,"signal":"High","followers":"55K","conf":"E","notes":"Most plugged-in Cavs reporter; best injury source"},{"name":"Joe Vardon","handle":"@joevardon","outlet":"The Athletic","team":"Cleveland Cavaliers","tier":1,"signal":"High","followers":"52K","conf":"E","notes":"The Athletic Cavs beat; strong injury sourcing"},{"name":"Kelsey Russo","handle":"@kelseyyrusso","outlet":"The Athletic","team":"Cleveland Cavaliers","tier":1,"signal":"High","followers":"38K","conf":"E","notes":"The Athletic co-beat; daily practice notes"},{"name":"Evan Dammarell","handle":"@AmnoteEvan","outlet":"Fear The Sword","team":"Cleveland Cavaliers","tier":2,"signal":"High","followers":"24K","conf":"E","notes":"Credentialed Cavs reporter; active coverage"},{"name":"Dan Labbe","handle":"@dan_labbe","outlet":"cleveland.com","team":"Cleveland Cavaliers","tier":2,"signal":"Medium","followers":"20K","conf":"E","notes":"Cleveland.com active Cavs coverage"},{"name":"Camryn Justice","handle":"@camijustice","outlet":"WEWS NewsChannel 5","team":"Cleveland Cavaliers","tier":2,"signal":"Medium","followers":"22K","conf":"E","notes":"Local TV Cavs reporter; locker-room access"},{"name":"Omari Sankofa II","handle":"@omarisankofa","outlet":"Detroit Free Press","team":"Detroit Pistons","tier":1,"signal":"High","followers":"35K","conf":"E","notes":"Lead Pistons reporter at the Freep"},{"name":"Coty Davis","handle":"@CotyDavis_24","outlet":"Detroit Free Press","team":"Detroit Pistons","tier":1,"signal":"High","followers":"24K","conf":"E","notes":"Freep co-beat with Sankofa"},{"name":"James Edwards III","handle":"@JLEdwardsIII","outlet":"The Athletic","team":"Detroit Pistons","tier":1,"signal":"High","followers":"60K","conf":"E","notes":"The Athletic Pistons beat; strong injury intel"},{"name":"Rod Beard","handle":"@detnewsRodBeard","outlet":"Detroit News","team":"Detroit Pistons","tier":2,"signal":"Medium","followers":"22K","conf":"E","notes":"Detroit News veteran; Pistons beat"},{"name":"Vince Ellis","handle":"@vinceeellis","outlet":"Detroit Free Press","team":"Detroit Pistons","tier":2,"signal":"Medium","followers":"19K","conf":"E","notes":"Freep Pistons contributor; active coverage"},{"name":"Dana Gauruder","handle":"@DanaGauruder","outlet":"Detroit News","team":"Detroit Pistons","tier":2,"signal":"Medium","followers":"14K","conf":"E","notes":"Detroit News Pistons co-coverage"},{"name":"Dustin Dopirak","handle":"@DustinDopirak","outlet":"The Athletic","team":"Indiana Pacers","tier":1,"signal":"High","followers":"38K","conf":"E","notes":"Top Pacers source; The Athletic primary beat"},{"name":"Scott Agness","handle":"@ScottAgness","outlet":"FieldhouseFiles.com","team":"Indiana Pacers","tier":1,"signal":"High","followers":"30K","conf":"E","notes":"Dedicated Pacers site; strong locker-room access"},{"name":"James Boyd","handle":"@RomeovilleKid","outlet":"Indianapolis Star","team":"Indiana Pacers","tier":2,"signal":"High","followers":"24K","conf":"E","notes":"Indy Star Pacers beat"},{"name":"Tony East","handle":"@TEastNBA","outlet":"SI / Pacers Digest","team":"Indiana Pacers","tier":2,"signal":"Medium","followers":"20K","conf":"E","notes":"Credentialed Pacers media"},{"name":"Nate Taylor","handle":"@ByNateTaylor","outlet":"The Athletic","team":"Indiana Pacers","tier":2,"signal":"Medium","followers":"27K","conf":"E","notes":"The Athletic Pacers supplemental coverage"},{"name":"Mark Montieth","handle":"@MontieMedia","outlet":"Pacers.com","team":"Indiana Pacers","tier":2,"signal":"Medium","followers":"14K","conf":"E","notes":"Official team site; insider practice access"},{"name":"Ira Winderman","handle":"@IraHeatBeat","outlet":"South Florida Sun Sentinel","team":"Miami Heat","tier":1,"signal":"High","followers":"108K","conf":"E","notes":"38 seasons covering the Heat; GOAT Heat reporter; injury GOAT source"},{"name":"Anthony Chiang","handle":"@Anthony_Chiang","outlet":"Miami Herald","team":"Miami Heat","tier":1,"signal":"High","followers":"48K","conf":"E","notes":"Herald primary beat; frequent injury updates"},{"name":"Shandel Richardson","handle":"@ShandelRich","outlet":"Sun Sentinel","team":"Miami Heat","tier":2,"signal":"High","followers":"30K","conf":"E","notes":"Sun Sentinel co-beat with Winderman"},{"name":"Brady Hawk","handle":"@BradyHawk305","outlet":"ClutchPoints","team":"Miami Heat","tier":2,"signal":"Medium","followers":"35K","conf":"E","notes":"Active daily Heat coverage; credentialed"},{"name":"Tim Reynolds","handle":"@ByTimReynolds","outlet":"Associated Press","team":"Miami Heat","tier":2,"signal":"High","followers":"40K","conf":"E","notes":"AP NBA reporter; South Florida-based; Heat coverage"},{"name":"Jason Jackson","handle":"@JacksonAndAudio","outlet":"Heat TV","team":"Miami Heat","tier":2,"signal":"Medium","followers":"38K","conf":"E","notes":"Heat TV host; strong locker-room access"},{"name":"Eric Nehm","handle":"@eric_nehm","outlet":"The Athletic","team":"Milwaukee Bucks","tier":1,"signal":"High","followers":"70K","conf":"E","notes":"Premier Bucks reporter; excellent injury intel"},{"name":"Matt Velazquez","handle":"@Matt_Velazquez","outlet":"Milwaukee Journal Sentinel","team":"Milwaukee Bucks","tier":1,"signal":"High","followers":"35K","conf":"E","notes":"Journal Sentinel primary Bucks beat"},{"name":"Jim Owczarski","handle":"@JimOwczarski","outlet":"Milwaukee Journal Sentinel","team":"Milwaukee Bucks","tier":2,"signal":"High","followers":"30K","conf":"E","notes":"JS co-beat; strong locker-room access"},{"name":"James Bates","handle":"@JamesBates_","outlet":"Brew Hoop","team":"Milwaukee Bucks","tier":2,"signal":"Medium","followers":"16K","conf":"E","notes":"Credentialed Bucks digital site"},{"name":"Phoebe Arscott","handle":"@PArscott_","outlet":"Bally Sports Wisconsin","team":"Milwaukee Bucks","tier":2,"signal":"Medium","followers":"14K","conf":"E","notes":"Local TV; game-day locker-room access"},{"name":"Jaymes Langrehr","handle":"@jlangrehr","outlet":"WISN 12","team":"Milwaukee Bucks","tier":2,"signal":"Medium","followers":"12K","conf":"E","notes":"Local TV Bucks reporter; credentialed"},{"name":"Ian Begley","handle":"@IanBegley","outlet":"SNY","team":"New York Knicks","tier":1,"signal":"High","followers":"150K","conf":"E","notes":"Most connected Knicks reporter; fastest on injuries"},{"name":"Steve Popper","handle":"@StevePopper","outlet":"Newsday","team":"New York Knicks","tier":1,"signal":"High","followers":"44K","conf":"E","notes":"Longest-tenured Knicks beat writer"},{"name":"Kristian Winfield","handle":"@Krisplashed","outlet":"NY Daily News","team":"New York Knicks","tier":1,"signal":"High","followers":"50K","conf":"E","notes":"Strong locker-room access; fast on news"},{"name":"James Edwards III","handle":"@JLEdwardsIII","outlet":"The Athletic","team":"New York Knicks","tier":1,"signal":"High","followers":"60K","conf":"E","notes":"The Athletic Knicks primary beat"},{"name":"Fred Katz","handle":"@FredKatz","outlet":"The Athletic","team":"New York Knicks","tier":2,"signal":"High","followers":"65K","conf":"E","notes":"Now national writer but deep Knicks sourcing"},{"name":"Marc Berman","handle":"@NYPost_Berman","outlet":"New York Post","team":"New York Knicks","tier":2,"signal":"High","followers":"34K","conf":"E","notes":"NY Post veteran Knicks writer"},{"name":"Alan Hahn","handle":"@alanhahn","outlet":"MSG Network","team":"New York Knicks","tier":2,"signal":"Medium","followers":"60K","conf":"E","notes":"MSG broadcast analyst; locker-room access"},{"name":"Stefan Bondy","handle":"@SBondyNYDN","outlet":"NY Daily News","team":"New York Knicks","tier":2,"signal":"Medium","followers":"22K","conf":"E","notes":"Daily News Knicks co-coverage"},{"name":"Jason Beede","handle":"@therealBeede","outlet":"Orlando Sentinel","team":"Orlando Magic","tier":1,"signal":"High","followers":"27K","conf":"E","notes":"Primary Magic beat writer"},{"name":"Khobi Price","handle":"@khobi_price","outlet":"Orlando Sentinel","team":"Orlando Magic","tier":1,"signal":"High","followers":"24K","conf":"E","notes":"Sentinel co-beat with Beede"},{"name":"Evan Dunlap","handle":"@EvanDunlap13","outlet":"ClutchPoints","team":"Orlando Magic","tier":2,"signal":"Medium","followers":"20K","conf":"E","notes":"Active credentialed Magic coverage"},{"name":"Bo Churney","handle":"@BoChurney","outlet":"Locked On Magic","team":"Orlando Magic","tier":2,"signal":"Medium","followers":"15K","conf":"E","notes":"Daily Magic credentialed reporter"},{"name":"Josh Robbins","handle":"@JoshuaBRobbins","outlet":"The Athletic","team":"Orlando Magic","tier":2,"signal":"High","followers":"40K","conf":"E","notes":"The Athletic; also covers Wizards and Magic"},{"name":"Scott Anez","handle":"@ScottAnez","outlet":"AP","team":"Orlando Magic","tier":2,"signal":"Medium","followers":"12K","conf":"E","notes":"AP Orlando-based reporter; covers Magic"},{"name":"Keith Pompey","handle":"@PompeyOnSixers","outlet":"Philadelphia Inquirer","team":"Philadelphia 76ers","tier":1,"signal":"High","followers":"68K","conf":"E","notes":"Dean of Sixers reporters; best injury source"},{"name":"Kyle Neubeck","handle":"@KyleNeubeck","outlet":"PhillyVoice","team":"Philadelphia 76ers","tier":1,"signal":"High","followers":"50K","conf":"E","notes":"Primary beat; strong daily locker-room access"},{"name":"Rich Hofmann","handle":"@rich_hofmann","outlet":"The Athletic","team":"Philadelphia 76ers","tier":1,"signal":"High","followers":"45K","conf":"E","notes":"The Athletic Sixers beat; excellent injury intel"},{"name":"Gina Mizell","handle":"@GinaMizell","outlet":"Philadelphia Inquirer","team":"Philadelphia 76ers","tier":2,"signal":"High","followers":"27K","conf":"E","notes":"Inquirer co-beat; good injury coverage"},{"name":"Tony Jones","handle":"@Tjonesonthenba","outlet":"The Athletic","team":"Philadelphia 76ers","tier":2,"signal":"Medium","followers":"69K","conf":"E","notes":""},{"name":"Derek Bodner","handle":"@DerekBodner","outlet":"The Athletic / IndyPHL","team":"Philadelphia 76ers","tier":2,"signal":"Medium","followers":"32K","conf":"E","notes":"Strong Sixers sourcing; veteran local reporter"},{"name":"Jonathan Wasserman","handle":"@NBADraftWass","outlet":"Bleacher Report","team":"Philadelphia 76ers","tier":2,"signal":"Medium","followers":"40K","conf":"E","notes":"Strong Sixers personnel sourcing"},{"name":"Josh Lewenberg","handle":"@JLew1050","outlet":"TSN","team":"Toronto Raptors","tier":1,"signal":"High","followers":"95K","conf":"E","notes":"Premier Raptors reporter; very reliable on injuries"},{"name":"Doug Smith","handle":"@dougsmithstar","outlet":"Toronto Star","team":"Toronto Raptors","tier":1,"signal":"High","followers":"58K","conf":"E","notes":"Veteran Star Raptors beat writer"},{"name":"Michael Grange","handle":"@michaelgrange","outlet":"Sportsnet","team":"Toronto Raptors","tier":1,"signal":"High","followers":"50K","conf":"E","notes":"Sportsnet Raptors analyst and reporter"},{"name":"Eric Koreen","handle":"@ekoreen","outlet":"The Athletic","team":"Toronto Raptors","tier":2,"signal":"High","followers":"40K","conf":"E","notes":"The Athletic Raptors coverage"},{"name":"Vivek Jacob","handle":"@vivekjacob_","outlet":"Sportsnet","team":"Toronto Raptors","tier":2,"signal":"High","followers":"24K","conf":"E","notes":"Regular credentialed Raptors coverage"},{"name":"Blake Murphy","handle":"@BlakeMurphyODC","outlet":"The Athletic / Raptors Republic","team":"Toronto Raptors","tier":2,"signal":"Medium","followers":"30K","conf":"E","notes":"Strong Raptors sourcing; credentialed"},{"name":"Josh Robbins","handle":"@JoshuaBRobbins","outlet":"The Athletic","team":"Washington Wizards","tier":1,"signal":"High","followers":"40K","conf":"E","notes":"Primary Wizards source at The Athletic"},{"name":"Ava Wallace","handle":"@avarwallace","outlet":"Washington Post","team":"Washington Wizards","tier":1,"signal":"High","followers":"27K","conf":"E","notes":"Washington Post Wizards beat"},{"name":"Bijan Todd","handle":"@bijan_todd","outlet":"NBC Sports Washington","team":"Washington Wizards","tier":1,"signal":"High","followers":"24K","conf":"E","notes":"NBC Washington Wizards reporter"},{"name":"Chase Hughes","handle":"@ChaseHughesNBC","outlet":"NBC Sports Washington","team":"Washington Wizards","tier":2,"signal":"Medium","followers":"20K","conf":"E","notes":"Regular Wizards credentialed reporter"},{"name":"Kareem Copeland","handle":"@kareemcopeland","outlet":"Washington Post","team":"Washington Wizards","tier":2,"signal":"Medium","followers":"22K","conf":"E","notes":"WaPo co-beat coverage"},{"name":"Zach Selby","handle":"@ZachSelby_DC","outlet":"Wizards.com","team":"Washington Wizards","tier":2,"signal":"Medium","followers":"14K","conf":"E","notes":"Official team site; insider practice access"},{"name":"Tim MacMahon","handle":"@espn_macmahon","outlet":"ESPN","team":"Dallas Mavericks","tier":1,"signal":"High","followers":"185K","conf":"W","notes":"ESPN Mavs beat; top injury source for Dallas"},{"name":"Brad Townsend","handle":"@townbrad","outlet":"Dallas Morning News","team":"Dallas Mavericks","tier":1,"signal":"High","followers":"48K","conf":"W","notes":"DMN veteran Mavs beat; decades on beat"},{"name":"Callie Caplan","handle":"@CallieCaplan","outlet":"Dallas Morning News","team":"Dallas Mavericks","tier":1,"signal":"High","followers":"32K","conf":"W","notes":"DMN Mavs reporter; active injury coverage"},{"name":"Grant Afseth","handle":"@GrantAfseth","outlet":"ClutchPoints","team":"Dallas Mavericks","tier":2,"signal":"High","followers":"38K","conf":"W","notes":"Active daily Mavs coverage; credentialed"},{"name":"Mike Curtis","handle":"@MikeACurtis2","outlet":"Dallas Morning News","team":"Dallas Mavericks","tier":2,"signal":"High","followers":"32K","conf":"W","notes":"DMN Mavs contributor"},{"name":"Eddie Sefko","handle":"@ESefko","outlet":"Dallas Morning News","team":"Dallas Mavericks","tier":2,"signal":"Medium","followers":"24K","conf":"W","notes":"Longtime Mavs coverage veteran"},{"name":"Tim Cato","handle":"@tim_cato","outlet":"ALLCITY","team":"Dallas Mavericks","tier":2,"signal":"Medium","followers":"30K","conf":"W","notes":""},{"name":"Saad Yousuf","handle":"@SaadYousuf126","outlet":"The Athletic","team":"Dallas Mavericks","tier":2,"signal":"High","followers":"35K","conf":"W","notes":"The Athletic Mavs beat writer"},{"name":"Bennett Durando","handle":"@BennettDurando","outlet":"Denver Post","team":"Denver Nuggets","tier":1,"signal":"High","followers":"35K","conf":"W","notes":"Denver Post primary Nuggets beat"},{"name":"Mike Singer","handle":"@msinger","outlet":"Denver Post","team":"Denver Nuggets","tier":1,"signal":"High","followers":"40K","conf":"W","notes":"Denver Post co-beat; strong injury coverage"},{"name":"Harrison Wind","handle":"@HarrisonWind","outlet":"DNVR Sports","team":"Denver Nuggets","tier":2,"signal":"High","followers":"38K","conf":"W","notes":"DNVR Nuggets credentialed site; very active"},{"name":"Adam Mares","handle":"@adam_mares","outlet":"104.3 The Fan","team":"Denver Nuggets","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"Local radio beat; daily access"},{"name":"Chris Dempsey","handle":"@chrisadempsey","outlet":"Altitude Sports","team":"Denver Nuggets","tier":2,"signal":"Medium","followers":"24K","conf":"W","notes":"Local TV reporter; game access"},{"name":"Katy Winge","handle":"@katywinge","outlet":"Altitude Sports TV","team":"Denver Nuggets","tier":2,"signal":"Medium","followers":"66K","conf":"W","notes":""},{"name":"Ryan Blackburn","handle":"@NBABlackburn","outlet":"Mile High Sports","team":"Denver Nuggets","tier":2,"signal":"Medium","followers":"28K","conf":"W","notes":""},{"name":"Gina De La Vega","handle":"@GinaDelaVega_","outlet":"Altitude Sports TV","team":"Denver Nuggets","tier":2,"signal":"Medium","followers":"18K","conf":"W","notes":"Altitude TV Nuggets sideline reporter"},{"name":"Anthony Slater","handle":"@anthonyVslater","outlet":"ESPN","team":"Golden State Warriors","tier":1,"signal":"High","followers":"195K","conf":"W","notes":"Left The Athletic for ESPN 2025; premier Warriors reporter"},{"name":"Marcus Thompson","handle":"@marcus_thompson","outlet":"The Athletic","team":"Golden State Warriors","tier":1,"signal":"High","followers":"88K","conf":"W","notes":"Veteran Warriors columnist; strong injury sourcing"},{"name":"Dalton Johnson","handle":"@DaltonJ_","outlet":"NBC Sports Bay Area","team":"Golden State Warriors","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"Active daily Warriors practice reports"},{"name":"Sam Gordon","handle":"@bysamgordon","outlet":"NBC Sports Bay Area","team":"Golden State Warriors","tier":2,"signal":"High","followers":"24K","conf":"W","notes":"NBC Bay Area Warriors beat reporter"},{"name":"Nick Friedell","handle":"@NickFriedell","outlet":"ESPN","team":"Golden State Warriors","tier":2,"signal":"High","followers":"48K","conf":"W","notes":"ESPN Warriors reporter; supplements Slater"},{"name":"Rusty Simmons","handle":"@Rusty_SFChron","outlet":"San Francisco Chronicle","team":"Golden State Warriors","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Chronicle Warriors coverage"},{"name":"Tim Kawkami","handle":"@timkawakami","outlet":"SF Standard","team":"Golden State Warriors","tier":1,"signal":"High","followers":"112K","conf":"W","notes":""},{"name":"Monte Poole","handle":"@montePooleNBCS","outlet":"NBC Sports Bay Area","team":"Golden State Warriors","tier":2,"signal":"Medium","followers":"65K","conf":"W","notes":""},{"name":"Connor Letourneau","handle":"@Con_Chron","outlet":"San Francisco Chronicle","team":"Golden State Warriors","tier":2,"signal":"Medium","followers":"22K","conf":"W","notes":"Chronicle Dubs beat; regular practice coverage"},{"name":"Jonathan Feigen","handle":"@Jonathan_Feigen","outlet":"Houston Chronicle","team":"Houston Rockets","tier":1,"signal":"High","followers":"60K","conf":"W","notes":"Decades on the beat; sole primary Rockets reporter"},{"name":"Kelly Iko","handle":"@KellyIko","outlet":"The Athletic","team":"Houston Rockets","tier":1,"signal":"High","followers":"50K","conf":"W","notes":"The Athletic Rockets beat; strong injury sourcing"},{"name":"Ben DuBose","handle":"@BenDuBose","outlet":"Space City Home Network","team":"Houston Rockets","tier":2,"signal":"High","followers":"28K","conf":"W","notes":"Active credentialed Rockets reporter"},{"name":"Lachard Binkley","handle":"@BinkleyHoops","outlet":"Locked On Rockets","team":"Houston Rockets","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Credentialed Rockets digital coverage"},{"name":"Adam Spolane","handle":"@AdamSpolane","outlet":"Sports Radio 610","team":"Houston Rockets","tier":2,"signal":"Medium","followers":"22K","conf":"W","notes":"Houston radio beat; locker-room access"},{"name":"Jackson Gatlin","handle":"@JacksonGatlin1","outlet":"Clutch City Sports","team":"Houston Rockets","tier":2,"signal":"Medium","followers":"15K","conf":"W","notes":"Credentialed Rockets coverage"},{"name":"Tomer Azarly","handle":"@TomerAzarly","outlet":"ClutchPoints","team":"LA Clippers","tier":1,"signal":"High","followers":"75K","conf":"W","notes":"Most connected Clippers reporter; very fast on injuries"},{"name":"Law Murray","handle":"@LawMurrayTheNU","outlet":"The Athletic","team":"LA Clippers","tier":1,"signal":"High","followers":"58K","conf":"W","notes":"The Athletic Clippers beat; strong locker-room presence"},{"name":"Joey Linn","handle":"@joeylinn_","outlet":"The Athletic","team":"LA Clippers","tier":1,"signal":"High","followers":"40K","conf":"W","notes":"The Athletic co-beat; daily Clippers access"},{"name":"Mirjam Swanson","handle":"@MirjamSwanson","outlet":"LA Daily News","team":"LA Clippers","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Daily News Clippers coverage"},{"name":"Andrew Greif","handle":"@AndrewGreif","outlet":"Los Angeles Times","team":"LA Clippers","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"LA Times Clippers beat"},{"name":"Broderick Turner","handle":"@BA_Turner","outlet":"Los Angeles Times","team":"LA Clippers","tier":2,"signal":"Medium","followers":"25K","conf":"W","notes":"LA Times Clippers contributor"},{"name":"Mike Trudell","handle":"@LakersReporter","outlet":"Spectrum SportsNet","team":"Los Angeles Lakers","tier":1,"signal":"High","followers":"135K","conf":"W","notes":"Most connected Lakers reporter; fastest on injuries"},{"name":"Dan Woike","handle":"@DanWoike","outlet":"The Athletic","team":"Los Angeles Lakers","tier":1,"signal":"High","followers":"60K","conf":"W","notes":"Replaced Buha at The Athletic on Lakers beat, June 2025"},{"name":"Dave McMenamin","handle":"@mcten","outlet":"ESPN","team":"Los Angeles Lakers","tier":1,"signal":"High","followers":"100K","conf":"W","notes":"ESPN Lakers insider; strong injury sourcing"},{"name":"Kyle Goon","handle":"@kylegoon","outlet":"Southern California News Group","team":"Los Angeles Lakers","tier":2,"signal":"High","followers":"32K","conf":"W","notes":"SCNG Lakers active beat writer"},{"name":"Jovan Buha","handle":"@jovanbuha","outlet":"YouTube / Independent","team":"Los Angeles Lakers","tier":2,"signal":"High","followers":"80K","conf":"W","notes":"Left The Athletic; continues covering Lakers independently"},{"name":"Bill Oram","handle":"@billoram","outlet":"The Athletic","team":"Los Angeles Lakers","tier":2,"signal":"Medium","followers":"30K","conf":"W","notes":"The Athletic Lakers supplemental coverage"},{"name":"Ohm Youngmisuk","handle":"@NotoriousOHM","outlet":"ESPN","team":"Los Angeles Lakers","tier":2,"signal":"High","followers":"52K","conf":"W","notes":"ESPN LA-based NBA reporter; covers Lakers"},{"name":"Damichael Cole","handle":"@DamichaelC","outlet":"Memphis Commercial Appeal","team":"Memphis Grizzlies","tier":1,"signal":"High","followers":"22K","conf":"W","notes":"Primary Grizzlies beat writer"},{"name":"Drew Hill","handle":"@DrewHill_DM","outlet":"Memphis Commercial Appeal","team":"Memphis Grizzlies","tier":1,"signal":"High","followers":"17K","conf":"W","notes":"Commercial Appeal co-beat"},{"name":"Chris Herrington","handle":"@ChrisHerrington","outlet":"The Daily Memphian","team":"Memphis Grizzlies","tier":2,"signal":"Medium","followers":"26K","conf":"W","notes":""},{"name":"Evan Barnes","handle":"@evan_b","outlet":"Memphis Commercial Appeal","team":"Memphis Grizzlies","tier":2,"signal":"Medium","followers":"15K","conf":"W","notes":"MCA Grizzlies supplemental coverage"},{"name":"Joe Mullinax","handle":"@sidelineSCOUT","outlet":"GrizznessNBA","team":"Memphis Grizzlies","tier":2,"signal":"Medium","followers":"16K","conf":"W","notes":"Credentialed Grizzlies digital coverage"},{"name":"Jared Ramsey","handle":"@JaredRamseyNBA","outlet":"Grind City Media","team":"Memphis Grizzlies","tier":2,"signal":"Medium","followers":"13K","conf":"W","notes":"Credentialed Grizzlies digital media"},{"name":"Jon Krawczynski","handle":"@JonKrawczynski","outlet":"The Athletic","team":"Minnesota Timberwolves","tier":1,"signal":"High","followers":"80K","conf":"W","notes":"Elite Wolves reporter; best NBA beat writer per many; top injury source"},{"name":"Chris Hine","handle":"@ChristopherHine","outlet":"Minneapolis Star Tribune","team":"Minnesota Timberwolves","tier":1,"signal":"High","followers":"40K","conf":"W","notes":"Star Tribune primary Wolves beat"},{"name":"Dane Moore","handle":"@DaneMooreNBA","outlet":"Dane Moore NBA Podcast","team":"Minnesota Timberwolves","tier":2,"signal":"High","followers":"38K","conf":"W","notes":"Credentialed Wolves media; very active on injuries"},{"name":"Jace Frederick","handle":"@JaceFrederick","outlet":"Pioneer Press","team":"Minnesota Timberwolves","tier":2,"signal":"Medium","followers":"19K","conf":"W","notes":""},{"name":"Tina Winder","handle":"@TinaWinder","outlet":"Bally Sports North","team":"Minnesota Timberwolves","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Local TV; locker-room access"},{"name":"Michael Rand","handle":"@RandBall","outlet":"Minneapolis Star Tribune","team":"Minnesota Timberwolves","tier":2,"signal":"Medium","followers":"27K","conf":"W","notes":"Star Tribune sports columnist; covers Wolves"},{"name":"Kelly Vogel","handle":"@KellyVogelNBA","outlet":"KSTP","team":"Minnesota Timberwolves","tier":2,"signal":"Medium","followers":"15K","conf":"W","notes":"Local TV Wolves reporter; credentialed"},{"name":"Jim Eichenhofer","handle":"@Jim_Eichenhofer","outlet":"Pelicans.com","team":"New Orleans Pelicans","tier":1,"signal":"High","followers":"34K","conf":"W","notes":"Official team site; unusually reliable; fast on injury news"},{"name":"Will Guillory","handle":"@WillGuillory","outlet":"The Athletic","team":"New Orleans Pelicans","tier":1,"signal":"High","followers":"27K","conf":"W","notes":"The Athletic Pelicans primary beat"},{"name":"Christian Clark","handle":"@cclark_13","outlet":"New Orleans Times-Picayune","team":"New Orleans Pelicans","tier":2,"signal":"High","followers":"24K","conf":"W","notes":"Times-Picayune Pelicans beat"},{"name":"Oleh Kosel","handle":"@OlehKosel","outlet":"The Bird Writes","team":"New Orleans Pelicans","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Credentialed digital Pelicans coverage"},{"name":"Rod Walker","handle":"@RodWalkerNBA","outlet":"New Orleans Advocate","team":"New Orleans Pelicans","tier":2,"signal":"Medium","followers":"18K","conf":"W","notes":"Advocate Pelicans beat writer"},{"name":"Andrew Lopez","handle":"@_Andrew_Lopez","outlet":"ESPN","team":"New Orleans Pelicans","tier":2,"signal":"High","followers":"38K","conf":"W","notes":"ESPN New Orleans-based Pelicans reporter"},{"name":"Brandon Rahbar","handle":"@BrandonRahbar","outlet":"Daily Thunder","team":"Oklahoma City Thunder","tier":1,"signal":"High","followers":"50K","conf":"W","notes":"Premier Thunder reporter; fastest on OKC injuries"},{"name":"Joel Lorenzi","handle":"@jxlorenzi","outlet":"The Oklahoman","team":"Oklahoma City Thunder","tier":1,"signal":"High","followers":"24K","conf":"W","notes":"Oklahoman primary Thunder beat writer"},{"name":"Rylan Stiles","handle":"@Rylan_Stiles","outlet":"Inside The Thunder / Locked On","team":"Oklahoma City Thunder","tier":1,"signal":"High","followers":"27K","conf":"W","notes":"Credentialed; hosts Locked On Thunder; strong injury intel"},{"name":"Justin Martinez","handle":"@JMartNBA","outlet":"The Oklahoman","team":"Oklahoma City Thunder","tier":2,"signal":"High","followers":"18K","conf":"W","notes":"Oklahoman Thunder trending/coverage reporter"},{"name":"Joe Mussatto","handle":"@JoeMussattoSCR","outlet":"The Oklahoman","team":"Oklahoma City Thunder","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Former Thunder beat; still deep Thunder sourcing"},{"name":"Gerald Bourguet","handle":"@GeraldBourguet","outlet":"PHNX Media","team":"Phoenix Suns","tier":1,"signal":"High","followers":"60K","conf":"W","notes":"Top Suns reporter; breaks injury news first"},{"name":"Duane Rankin","handle":"@DuaneRankin","outlet":"Arizona Republic","team":"Phoenix Suns","tier":1,"signal":"High","followers":"44K","conf":"W","notes":"Arizona Republic Suns veteran"},{"name":"Kellan Olson","handle":"@kellanolson","outlet":"Arizona Republic","team":"Phoenix Suns","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"Republic co-beat; active injury reporting"},{"name":"John Gambadoro","handle":"@Gambo987","outlet":"Arizona Sports 98.7","team":"Phoenix Suns","tier":2,"signal":"Medium","followers":"38K","conf":"W","notes":"Local radio; strong Suns sourcing"},{"name":"Bo Brack","handle":"@BoBrack","outlet":"PHNX Sports","team":"Phoenix Suns","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"PHNX co-beat; regular practice coverage"},{"name":"Ty Tasker","handle":"@TyTasker","outlet":"PHNX Sports","team":"Phoenix Suns","tier":2,"signal":"Medium","followers":"16K","conf":"W","notes":"PHNX Suns contributor; credentialed"},{"name":"Casey Holdahl","handle":"@CHold","outlet":"TrailBlazers.com","team":"Portland Trail Blazers","tier":1,"signal":"High","followers":"35K","conf":"W","notes":"Team site; very detailed practice notes; Tier 1 reliability"},{"name":"Jason Quick","handle":"@jwquick","outlet":"The Athletic","team":"Portland Trail Blazers","tier":1,"signal":"High","followers":"50K","conf":"W","notes":"The Athletic Blazers beat veteran"},{"name":"Sean Highkin","handle":"@highkin","outlet":"Rose Garden Report","team":"Portland Trail Blazers","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"Credentialed independent Blazers reporter"},{"name":"Aaron Fentress","handle":"@AaronJFentress","outlet":"The Oregonian","team":"Portland Trail Blazers","tier":2,"signal":"Medium","followers":"24K","conf":"W","notes":"Oregonian Blazers coverage"},{"name":"Joe Freeman","handle":"@BlazerFreeman","outlet":"The Oregonian","team":"Portland Trail Blazers","tier":2,"signal":"Medium","followers":"28K","conf":"W","notes":""},{"name":"Jamie Hudson","handle":"@JamieHudson_","outlet":"NBC Sports Northwest","team":"Portland Trail Blazers","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"Local TV; locker-room access"},{"name":"Kerry Eggers","handle":"@KerryEggers","outlet":"Portland Tribune","team":"Portland Trail Blazers","tier":2,"signal":"Medium","followers":"18K","conf":"W","notes":"Portland Tribune; veteran Blazers beat"},{"name":"James Ham","handle":"@James_HamNBA","outlet":"NBC Sports California","team":"Sacramento Kings","tier":1,"signal":"High","followers":"44K","conf":"W","notes":"Most connected Kings reporter; decades on beat"},{"name":"Jason Anderson","handle":"@JandersonSacBee","outlet":"Sacramento Bee","team":"Sacramento Kings","tier":1,"signal":"High","followers":"27K","conf":"W","notes":"Sacramento Bee Kings primary beat"},{"name":"Sean Cunningham","handle":"@seancunningham45","outlet":"ABC10 Sacramento","team":"Sacramento Kings","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"Local TV; strong locker-room access"},{"name":"Frankie Cartoscelli","handle":"@FCartoscelli3","outlet":"Sactown Sports 1140","team":"Sacramento Kings","tier":2,"signal":"Medium","followers":"10K","conf":"W","notes":""},{"name":"Brenden Nunes","handle":"@BrendenNunesNBA","outlet":"Sactown Sports 1140","team":"Sacramento Kings","tier":2,"signal":"Medium","followers":"11K","conf":"W","notes":""},{"name":"Mike Richman","handle":"@MikeRichman","outlet":"Kings.com","team":"Sacramento Kings","tier":2,"signal":"High","followers":"24K","conf":"W","notes":"Official team site; good injury and practice detail"},{"name":"Mychael Urban","handle":"@MychealUrban","outlet":"NBC Sports California","team":"Sacramento Kings","tier":2,"signal":"Medium","followers":"20K","conf":"W","notes":"NBC CA Kings supplemental reporter"},{"name":"Matt George","handle":"@MattGeorge975","outlet":"95.7 The Game / KHTK","team":"Sacramento Kings","tier":2,"signal":"Medium","followers":"18K","conf":"W","notes":"Sacramento radio; locker-room access"},{"name":"Jeff McDonald","handle":"@JMcDonald_SAEN","outlet":"San Antonio Express-News","team":"San Antonio Spurs","tier":1,"signal":"High","followers":"40K","conf":"W","notes":"Lead Spurs beat writer at Express-News"},{"name":"Tom Orsborn","handle":"@tom_orsborn","outlet":"San Antonio Express-News","team":"San Antonio Spurs","tier":1,"signal":"High","followers":"30K","conf":"W","notes":"Express-News co-beat; strong practice notes"},{"name":"Paul Garcia","handle":"@PaulGarciaNBA","outlet":"Project Spurs / Locked On","team":"San Antonio Spurs","tier":2,"signal":"High","followers":"30K","conf":"W","notes":"Credentialed Spurs digital coverage"},{"name":"Mike Finger","handle":"@mikefinger","outlet":"San Antonio Express-News","team":"San Antonio Spurs","tier":2,"signal":"Medium","followers":"27K","conf":"W","notes":"SAEN sports columnist; Spurs-focused"},{"name":"Jabari Young","handle":"@JabariJYoung","outlet":"CNBC / Sports Business","team":"San Antonio Spurs","tier":2,"signal":"Medium","followers":"28K","conf":"W","notes":"Former Spurs beat; still well-sourced in SA"},{"name":"Damian Arseneault","handle":"@DamianArseneault","outlet":"The Athletic","team":"San Antonio Spurs","tier":2,"signal":"High","followers":"20K","conf":"W","notes":"The Athletic Spurs coverage"},{"name":"Andy Larsen","handle":"@andyblarsen","outlet":"Salt Lake Tribune","team":"Utah Jazz","tier":1,"signal":"High","followers":"55K","conf":"W","notes":"Top Jazz reporter; stat-savvy injury coverage"},{"name":"Eric Walden","handle":"@tribjazz","outlet":"Salt Lake Tribune","team":"Utah Jazz","tier":1,"signal":"High","followers":"30K","conf":"W","notes":"Tribune co-beat with Larsen"},{"name":"Sarah Todd","handle":"@NBASarah","outlet":"KSL Sports","team":"Utah Jazz","tier":2,"signal":"High","followers":"27K","conf":"W","notes":"KSL Sports Jazz beat"},{"name":"Jody Genessy","handle":"@DJJazzyJody","outlet":"Deseret News","team":"Utah Jazz","tier":2,"signal":"High","followers":"24K","conf":"W","notes":"Deseret News veteran Jazz reporter"},{"name":"David Locke","handle":"@DLocke_Jazz","outlet":"Jazz Radio / KSL","team":"Utah Jazz","tier":2,"signal":"Medium","followers":"35K","conf":"W","notes":"Official Jazz radio voice; strong locker-room presence"},{"name":"Shams Charania","handle":"@ShamsCharania","outlet":"ESPN","team":"All Teams","tier":1,"signal":"High","followers":"2.2M","conf":"NAT","notes":"Premier NBA insider; first on everything league-wide"},{"name":"Marc Stein","handle":"@TheSteinLine","outlet":"Substack / Independent","team":"All Teams","tier":1,"signal":"High","followers":"880K","conf":"NAT","notes":"Veteran insider; deep team-by-team sourcing"},{"name":"Chris Haynes","handle":"@ChrisBHaynes","outlet":"TNT / Bleacher Report","team":"All Teams","tier":1,"signal":"High","followers":"1.3M","conf":"NAT","notes":"Top-tier NBA insider; all teams"},{"name":"Jake Fischer","handle":"@JakeLFischer","outlet":"Yahoo Sports","team":"All Teams","tier":1,"signal":"High","followers":"200K","conf":"NAT","notes":"Strong NBA transaction & injury intel"},{"name":"Sam Amick","handle":"@sam_amick","outlet":"The Athletic","team":"All Teams","tier":1,"signal":"High","followers":"168K","conf":"NAT","notes":"The Athletic veteran insider; strong team sourcing"},{"name":"Brian Windhorst","handle":"@WindhorstESPN","outlet":"ESPN","team":"All Teams","tier":2,"signal":"High","followers":"500K","conf":"NAT","notes":"ESPN NBA analyst; frequent injury context"},{"name":"Tim Bontemps","handle":"@TimBontemps","outlet":"ESPN","team":"All Teams","tier":2,"signal":"High","followers":"150K","conf":"NAT","notes":"ESPN NBA reporter; multi-team coverage"},{"name":"Keith Smith","handle":"@KeithSmithNBA","outlet":"Spotrac","team":"All Teams","tier":2,"signal":"High","followers":"188K","conf":"NAT","notes":"Cap expert; tracks all personnel & injury-related moves"},{"name":"Kevin O'Connor","handle":"@KevinOConnorNBA","outlet":"The Ringer","team":"All Teams","tier":2,"signal":"Medium","followers":"228K","conf":"NAT","notes":"National analysis with injury context"},{"name":"Ramona Shelburne","handle":"@ramonashelburne","outlet":"ESPN","team":"All Teams","tier":2,"signal":"High","followers":"380K","conf":"NAT","notes":"ESPN senior writer; deep sourcing across teams"}];
 
-// ─── NBA PLAYER DATABASE ─────────────────────────────────────────────────────
-// Current roster players by team — used for name matching and left sidebar dropdown
-const NBA_PLAYERS = {
-  "Atlanta Hawks": ["Trae Young","Dejounte Murray","Jalen Johnson","De'Andre Hunter","Clint Capela","Saddiq Bey","Bogdan Bogdanovic","Garrison Mathews","Vit Krejci","Mouhamed Gueye","Larry Nance Jr.","Onyeka Okongwu"],
-  "Boston Celtics": ["Jayson Tatum","Jaylen Brown","Kristaps Porzingis","Jrue Holiday","Al Horford","Payton Pritchard","Sam Hauser","Luke Kornet","Xavier Tillman","Drew Peterson","Neemias Queta"],
-  "Brooklyn Nets": ["Cam Thomas","Ben Simmons","Dorian Finney-Smith","Dennis Schroder","Day'Ron Sharpe","Trendon Watford","Noah Clowney","Dariq Whitehead","Lonnie Walker IV","Armoni Brooks"],
-  "Charlotte Hornets": ["LaMelo Ball","Brandon Miller","Miles Bridges","Mark Williams","Grant Williams","Nick Richards","Tre Mann","Seth Curry","Frank Ntilikina","Cody Martin","Davis Bertans"],
-  "Chicago Bulls": ["Zach LaVine","DeMar DeRozan","Nikola Vucevic","Coby White","Patrick Williams","Alex Caruso","Ayo Dosunmu","Andre Drummond","Torrey Craig","Julian Phillips","Terry Taylor"],
-  "Cleveland Cavaliers": ["Donovan Mitchell","Darius Garland","Evan Mobley","Jarrett Allen","Max Strus","Caris LeVert","Georges Niang","Sam Merrill","Craig Porter Jr.","Emoni Bates","Isaiah Mobley"],
-  "Dallas Mavericks": ["Luka Doncic","Kyrie Irving","Tim Hardaway Jr.","Derrick Jones Jr.","Daniel Gafford","Maxi Kleber","Dwight Powell","Josh Green","Dante Exum","Markieff Morris","Olivier-Maxence Prosper"],
-  "Denver Nuggets": ["Nikola Jokic","Jamal Murray","Michael Porter Jr.","Aaron Gordon","Kentavious Caldwell-Pope","Reggie Jackson","Justin Holiday","Zeke Nnaji","Christian Braun","Peyton Watson","Hunter Tyson"],
-  "Detroit Pistons": ["Cade Cunningham","Jalen Duren","Bojan Bogdanovic","Killian Hayes","Ausar Thompson","Isaiah Stewart","Alec Burks","Monte Morris","James Wiseman","Simone Fontecchio","Marcus Sasser"],
-  "Golden State Warriors": ["Stephen Curry","Klay Thompson","Draymond Green","Andrew Wiggins","Kevon Looney","Chris Paul","Brandin Podziemski","Moses Moody","Jonathan Kuminga","Trayce Jackson-Davis","Gary Payton II"],
-  "Houston Rockets": ["Alperen Sengun","Jalen Green","Fred VanVleet","Dillon Brooks","Jabari Smith Jr.","Amen Thompson","Tari Eason","Aaron Holiday","Jeff Green","Cam Whitmore","Steven Adams"],
-  "Indiana Pacers": ["Tyrese Haliburton","Bennedict Mathurin","Pascal Siakam","Myles Turner","T.J. McConnell","Aaron Nesmith","Andrew Nembhard","Isaiah Jackson","Obi Toppin","Ben Sheppard","Oscar Tshiebwe"],
-  "LA Clippers": ["Kawhi Leonard","Paul George","James Harden","Russell Westbrook","Ivica Zubac","Norman Powell","Mason Plumlee","Terance Mann","Bones Hyland","Amir Coffey","Kobe Brown"],
-  "Los Angeles Lakers": ["LeBron James","Anthony Davis","D'Angelo Russell","Austin Reaves","Rui Hachimura","Taurean Prince","Christian Wood","Jaxson Hayes","Max Christie","Gabe Vincent","Cam Reddish"],
-  "Memphis Grizzlies": ["Ja Morant","Desmond Bane","Jaren Jackson Jr.","Marcus Smart","Ziaire Williams","Luke Kennard","Brandon Clarke","GG Jackson","Derrick Rose","Jake LaRavia","Vince Williams Jr."],
-  "Miami Heat": ["Jimmy Butler","Bam Adebayo","Tyler Herro","Terry Rozier","Kyle Lowry","Caleb Martin","Duncan Robinson","Nikola Jovic","Jaime Jaquez Jr.","Haywood Highsmith","Josh Richardson"],
-  "Milwaukee Bucks": ["Giannis Antetokounmpo","Damian Lillard","Khris Middleton","Brook Lopez","Bobby Portis","Malik Beasley","Taurean Prince","Pat Connaughton","MarJon Beauchamp","Andre Jackson Jr.","AJ Green"],
-  "Minnesota Timberwolves": ["Anthony Edwards","Karl-Anthony Towns","Rudy Gobert","Mike Conley","Jaden McDaniels","Naz Reid","Kyle Anderson","Jordan McLaughlin","Troy Brown Jr.","Leonard Miller","Rob Dillingham"],
-  "New Orleans Pelicans": ["Zion Williamson","Brandon Ingram","CJ McCollum","Herb Jones","Jonas Valanciunas","Trey Murphy III","Jose Alvarado","Larry Nance Jr.","Dyson Daniels","Naji Marshall","Jordan Hawkins"],
-  "New York Knicks": ["Jalen Brunson","Julius Randle","OG Anunoby","Karl-Anthony Towns","Mikal Bridges","Josh Hart","Donte DiVincenzo","Isaiah Hartenstein","Precious Achiuwa","Bojan Bogdanovic","Miles McBride"],
-  "Oklahoma City Thunder": ["Shai Gilgeous-Alexander","Jalen Williams","Luguentz Dort","Josh Giddey","Chet Holmgren","Isaiah Joe","Kenrich Williams","Aaron Wiggins","Aleksej Pokusevski","Ousmane Dieng","Jaylin Williams"],
-  "Orlando Magic": ["Paolo Banchero","Franz Wagner","Wendell Carter Jr.","Cole Anthony","Markelle Fultz","Jalen Suggs","Gary Harris","Moritz Wagner","Jonathan Isaac","Kevon Harris","Caleb Houstan"],
-  "Philadelphia 76ers": ["Joel Embiid","Tyrese Maxey","Kelly Oubre Jr.","Tobias Harris","De'Anthony Melton","Patrick Beverley","Mo Bamba","Paul Reed","KJ Martin","Ricky Council IV","Robert Covington"],
-  "Phoenix Suns": ["Kevin Durant","Devin Booker","Bradley Beal","Jusuf Nurkic","Eric Gordon","Grayson Allen","Drew Eubanks","Yuta Watanabe","Damion Lee","Royce O'Neale","Bol Bol"],
-  "Portland Trail Blazers": ["Scoot Henderson","Anfernee Simons","Jerami Grant","Deandre Ayton","Toumani Camara","Malcolm Brogdon","Matisse Thybulle","Robert Williams III","Jabari Walker","Duop Reath","Kris Murray"],
-  "Sacramento Kings": ["De'Aaron Fox","Domantas Sabonis","Kevin Huerter","Malik Monk","Harrison Barnes","Keegan Murray","Trey Lyles","Alex Len","Kessler Edwards","Jordan Ford","Colby Jones"],
-  "San Antonio Spurs": ["Victor Wembanyama","Devin Vassell","Keldon Johnson","Jeremy Sochan","Tre Jones","Malaki Branham","Zach Collins","Julian Champagnie","Blake Wesley","Cedi Osman","Sandro Mamukelashvili"],
-  "Toronto Raptors": ["Scottie Barnes","Pascal Siakam","RJ Barrett","Jakob Poeltl","Immanuel Quickley","Bruce Brown","Gary Trent Jr.","Precious Achiuwa","Otto Porter Jr.","Gradey Dick","Javon Freeman-Liberty"],
-  "Utah Jazz": ["Lauri Markkanen","Collin Sexton","Jordan Clarkson","Walker Kessler","John Collins","Ochai Agbaji","Taylor Hendricks","Talen Horton-Tucker","Keyonte George","Brice Sensabaugh","Johnny Juzang"],
-  "Washington Wizards": ["Kyle Kuzma","Kristaps Porzingis","Bradley Beal","Jordan Poole","Deni Avdija","Daniel Gafford","Tyus Jones","Corey Kispert","Anthony Gill","Marvin Bagley III","Delon Wright"],
-};
-
-// Flat set for fast O(1) lookup
-const NBA_PLAYER_SET = new Set(Object.values(NBA_PLAYERS).flat().map(p => p.toLowerCase()));
-// Player → team lookup
-const PLAYER_TEAM_MAP = {};
-Object.entries(NBA_PLAYERS).forEach(([team, players]) => players.forEach(p => { PLAYER_TEAM_MAP[p.toLowerCase()] = team; }));
-
 // ─── ARCH PANEL TOGGLE ───────────────────────────────────────────────────────
 function toggleArch() {
   document.getElementById('arch-panel').classList.toggle('open');
@@ -1798,75 +1586,44 @@ function extractPlayer(text) {
   return null;
 }
 
-function calcConfidence(reporter, status, tweetText = '', corrobCount = 0) {
-  // ── Factor 1: Reporter tier (0–35) ──────────────────────────────────────────
-  const tierScore = reporter.tier === 1 ? 35 : reporter.tier === 2 ? 22 : 8;
-
-  // ── Factor 2: Source credibility by outlet type (0–20) ──────────────────────
-  const t = (reporter.outlet || '').toLowerCase();
-  const outletScore =
-    /espn|athletic|nba\.com|\.com\/nba/.test(t) ? 20 :
-    /bleacher|yahoo|si\.com/.test(t) ? 15 :
-    /post|times|herald|sun|tribune|journal/.test(t) ? 14 :
-    /clutchpoints|fansided|locked on|substack/.test(t) ? 10 : 12;
-
-  // ── Factor 3: Status specificity (0–18) ─────────────────────────────────────
-  const statusScore = {
-    'Out': 18, 'Doubtful': 14, 'Game-Time Decision': 12,
-    'Questionable': 10, 'Probable': 6
-  }[status] ?? 8;
-
-  // ── Factor 4: Tweet language precision (0–15) ────────────────────────────────
-  const tw = (tweetText || '').toLowerCase();
-  let langScore = 5; // baseline
-  if (/ruled out|will not play|won'?t play|is out/.test(tw)) langScore = 15;
-  else if (/doubtful|unlikely/.test(tw)) langScore = 13;
-  else if (/game.time|gtd/.test(tw)) langScore = 11;
-  else if (/questionable|limited/.test(tw)) langScore = 9;
-  else if (/probable|expected to play/.test(tw)) langScore = 7;
-  // Named body part adds precision
-  if (/\(ankle\)|\(knee\)|\(hamstring\)|\(achilles\)|\(back\)|\(shoulder\)/.test(tw)) langScore = Math.min(15, langScore + 2);
-  // Official injury report language
-  if (/official injury report|listed as|on the injury report/.test(tw)) langScore = Math.min(15, langScore + 2);
-
-  // ── Factor 5: Injury signal rating (0–8) ────────────────────────────────────
-  const signalScore = reporter.signal === 'High' ? 8 : 4;
-
-  // ── Factor 6: Corroboration bonus (0–9, +3 per source, max 3 sources) ───────
-  const corrScore = Math.min(corrobCount * 3, 9);
-
-  // ── Factor 7: Known player penalty/bonus ─────────────────────────────────────
-  // (applied externally via isKnownPlayer flag on the report)
-
-  const raw = tierScore + outletScore + statusScore + langScore + signalScore + corrScore;
-  return Math.min(raw / 105, 0.99); // normalize to 0–1, cap at 0.99
+function calcConfidence(reporter, statusWeight, tweetText, corrobCount = 0) {
+  const bd = _confBreakdown(reporter.tier, reporter.signal, reporter.outlet, statusWeight, tweetText, corrobCount);
+  return Math.min((bd.tier + bd.outlet + bd.status + bd.lang + bd.signal + bd.corr) / 100, 0.99);
 }
 
-// Expose factors for display breakdown
-function confBreakdown(reporter, status, tweetText = '', corrobCount = 0) {
-  const t = (reporter.outlet || '').toLowerCase();
-  return {
-    tier:    reporter.tier === 1 ? 35 : reporter.tier === 2 ? 22 : 8,
-    outlet:  /espn|athletic/.test(t) ? 20 : /post|times|herald/.test(t) ? 14 : /clutchpoints|fansided/.test(t) ? 10 : 12,
-    status:  {Out:18, Doubtful:14, 'Game-Time Decision':12, Questionable:10, Probable:6}[status] ?? 8,
-    lang:    (() => { const tw=(tweetText||'').toLowerCase(); return /ruled out|will not play/.test(tw)?15:/doubtful/.test(tw)?13:/game.time|gtd/.test(tw)?11:/questionable/.test(tw)?9:7; })(),
-    signal:  reporter.signal === 'High' ? 8 : 4,
-    corr:    Math.min(corrobCount * 3, 9),
-  };
+// Returns the 6 individual factor scores for display
+function getConfBreakdown(r) {
+  const rep = REPORTERS.find(x => ('@' + x.handle.toLowerCase()) === (r.handle || '').toLowerCase()) || {};
+  const tier   = rep.tier   || r.tier   || 2;
+  const signal = rep.signal || r.signal || 'Medium';
+  const outlet = rep.outlet || r.outlet || '';
+  const statusMap = { Out: 0.95, Doubtful: 0.8, 'Game-Time Decision': 0.65, Questionable: 0.5, Probable: 0.35 };
+  const sw = statusMap[r.status] || 0.5;
+  return _confBreakdown(tier, signal, outlet, sw, r.tweet, (r.corroborators || []).length);
+}
+
+function _confBreakdown(tier, signal, outlet, statusWeight, tweetText, corrobCount) {
+  const tierPts   = tier === 1 ? 35 : tier === 2 ? 22 : 10;
+  const outletPts = ['ESPN','The Athletic','Associated Press','AP','Reuters','USA Today','Yahoo']
+    .some(o => (outlet || '').includes(o)) ? 20 : tier === 1 ? 15 : 10;
+  const statusPts = statusWeight >= 0.9 ? 18 : statusWeight >= 0.75 ? 14 : statusWeight >= 0.55 ? 10 : 6;
+  const langPts   = tweetText ? Math.min(15, Math.round((tweetText.length / 260) * 15)) : 8;
+  const signalPts = signal === 'High' ? 8 : 4;
+  const corrPts   = Math.min(corrobCount * 3, 9);
+  return { tier: tierPts, outlet: outletPts, status: statusPts, lang: langPts, signal: signalPts, corr: corrPts };
 }
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let allReports = [];
 let filtered = [];
-// Player history: playerName.toLowerCase() → array of report objects
-const playerHistory = {};
 let currentTeam = 'all';
+let currentPlayer = 'all';
 let currentStatus = 'all';
 let currentConf = 'all';
 let currentSort = 'time';
 let searchQuery = '';
 let newIds = new Set();
-const newExpiry = {};  // reportId → expiry timestamp for countdown
+const newExpiry = {};  // reportId → expiry timestamp (anchored to tweet time)
 
 // TweetAPI state
 let reporterProfiles = {};
@@ -1988,9 +1745,15 @@ function processTweet(tweet, reporter) {
   }
 
   allReports.unshift(newReport);
-  newIds.add(newReport.id);
-  newExpiry[newReport.id] = Date.now() + 300000;
-  setTimeout(() => { newIds.delete(newReport.id); delete newExpiry[newReport.id]; renderFeed(); }, 300000);
+  // Anchor NEW badge 15-min window to the tweet's own time, not page-load time
+  const tweetMs = new Date(tweet.createdAt).getTime() || Date.now();
+  const expiryMs = tweetMs + 900000; // 15 minutes from tweet time
+  const msLeft = expiryMs - Date.now();
+  if (msLeft > 0) {
+    newIds.add(newReport.id);
+    newExpiry[newReport.id] = expiryMs;
+    setTimeout(() => { newIds.delete(newReport.id); delete newExpiry[newReport.id]; renderFeed(); }, msLeft);
+  }
 }
 
 // ─── STEP 2A: Search-based approach (most efficient — 1 API call covers all reporters) ──
@@ -2092,19 +1855,11 @@ async function loadData(silent = false) {
 }
 
 function loadMockData() {
-  allReports = DEMO_REPORTS.map((r, i) => {
-    const rep = REPORTERS.find(rep => rep.name === r.reporter) || { tier: r.tier || 2, signal: 'Medium', outlet: r.outlet || '' };
-    const confidence = calcConfidence(rep, r.status, r.tweet || '', (r.corroborators||[]).length);
-    const report = {
-      ...r, id: i,
-      timestamp: new Date(Date.now() - r.minsAgo * 60000),
-      confidence,
-      isKnownPlayer: NBA_PLAYER_SET.has((r.player || '').toLowerCase()),
-      corrobTweets: r.corrobTweets || [],
-    };
-    storePlayerHistory(report);
-    return report;
-  });
+  allReports = DEMO_REPORTS.map((r, i) => ({
+    ...r, id: i,
+    timestamp: new Date(Date.now() - r.minsAgo * 60000),
+    leadTime: Math.floor(Math.random() * 160 + 20)
+  }));
   setApiStatus('demo', 'DEMO');
   setTimeout(() => {
     document.getElementById('skeleton').style.display = 'none';
@@ -2133,9 +1888,15 @@ async function loadFromAPI(silent = false) {
       const existingIds = new Set(allReports.map(r => r.source_id));
       mapped.forEach(r => {
         if (r.source_id && !existingIds.has(r.source_id)) {
-          newIds.add(r.id);
-          newExpiry[r.id] = Date.now() + 300000;
-          setTimeout(() => { newIds.delete(r.id); delete newExpiry[r.id]; renderFeed(); }, 300000);
+          // Anchor NEW badge to tweet's own timestamp, 15-min window
+          const tweetMs = r.timestamp ? new Date(r.timestamp).getTime() : Date.now();
+          const expiryMs = tweetMs + 900000;
+          const msLeft = expiryMs - Date.now();
+          if (msLeft > 0) {
+            newIds.add(r.id);
+            newExpiry[r.id] = expiryMs;
+            setTimeout(() => { newIds.delete(r.id); delete newExpiry[r.id]; renderFeed(); }, msLeft);
+          }
         }
       });
       allReports = mapped;
@@ -2155,41 +1916,24 @@ async function loadFromAPI(silent = false) {
 }
 
 function mapApiReport(r, i) {
-  const reporter = REPORTERS.find(rep => rep.name === (r.reporter_name || r.reporter) || rep.handle === (r.reporter_handle || r.handle)?.replace('@','')) || { tier: r.reporter_tier || r.tier || 2, signal: 'Medium', outlet: r.outlet || '' };
-  const status = r.game_status || r.status || 'Questionable';
-  const tweet = r.tweet_text || r.tweet || '';
-  const corroborators = r.corroborators || [];
-  const confidence = r.confidence != null && r.confidence <= 1
-    ? r.confidence  // already 0-1 from fixed server
-    : calcConfidence(reporter, status, tweet, corroborators.length);
-
-  const playerRaw = r.player_name || r.player || 'Unknown';
-  const isKnownPlayer = NBA_PLAYER_SET.has(playerRaw.toLowerCase());
-  // If unknown, try to infer from team roster
-  const player = !isKnownPlayer && playerRaw === 'Unknown' ? 'Unknown Player' : playerRaw;
-
-  const report = {
-    id: r.id || i,
+  return {
+    id: i,
     source_id: r.id || null,
-    player,
+    player: r.player_name || r.player || 'Unknown',
     team: r.team || 'Unknown',
     injury: r.injury_description || r.injury || 'Injury',
     body: r.body_part || r.body || '',
-    status,
-    confidence,
+    status: r.game_status || r.status || 'Questionable',
+    confidence: (r.confidence_score || r.confidence || 75) / 100,
     reporter: r.reporter_name || r.reporter || '',
     handle: r.reporter_handle || r.handle || '',
     outlet: r.outlet || '',
-    tier: reporter.tier,
-    tweet,
-    tweetId: r.id || null,  // for direct tweet link
+    tier: r.reporter_tier || r.tier || 2,
+    tweet: r.tweet_text || r.tweet || '',
     timestamp: new Date(r.event_time || r.timestamp || Date.now()),
-    corroborators,
-    corrobTweets: r.corrobTweets || [],  // [{reporter, handle, tweet, tweetId}]
-    isKnownPlayer,
+    leadTime: r.lead_time_minutes || Math.floor(Math.random() * 120 + 15),
+    corroborators: r.corroborators || [],
   };
-  storePlayerHistory(report);
-  return report;
 }
 
 function setApiStatus(state, text) {
@@ -2240,8 +1984,6 @@ function updateStats() {
 }
 
 // ─── TEAM LIST ────────────────────────────────────────────────────────────────
-let currentPlayer = 'all';
-
 function buildTeamList() {
   const teamConf = {};
   REPORTERS.forEach(r => { if (r.team !== 'All Teams') teamConf[r.team] = r.conf; });
@@ -2253,46 +1995,17 @@ function buildTeamList() {
   });
   const visibleTeams = currentConf === 'all' ? ALL_TEAMS : ALL_TEAMS.filter(t => teamConf[t] === currentConf);
   document.getElementById('team-count-label').textContent = visibleTeams.length;
-
-  const statusDotColor = s => s === 'Out' ? 'var(--red)' : s === 'Doubtful' ? 'var(--orange)' : s === 'Questionable' ? 'var(--yellow)' : 'var(--green)';
-
   const allBtn = `<button class="team-btn ${currentTeam === 'all' ? 'active' : ''}" onclick="filterTeam('all', this)">
     <span class="team-dot" style="${currentTeam === 'all' ? 'background:var(--accent)' : ''}"></span>
     All Teams <span class="team-count">${allReports.length}</span></button>`;
-
-  const teamBtns = visibleTeams.map(t => {
-    const isActive = currentTeam === t;
-    // Players on this team who have reports
-    const teamPlayers = [...new Set(allReports.filter(r => r.team === t && r.player !== 'Unknown Player').map(r => r.player))];
-    const playerDropdown = teamPlayers.length ? `
-      <div class="team-players ${isActive ? 'show' : ''}">
-        ${teamPlayers.map(p => {
-          const latestReport = allReports.find(r => r.player === p && r.team === t);
-          const dot = latestReport ? statusDotColor(latestReport.status) : 'var(--muted)';
-          const pCount = allReports.filter(r => r.player === p && r.team === t).length;
-          return `<button class="player-filter-btn ${currentPlayer === p ? 'active' : ''}" onclick="filterPlayer('${p.replace(/'/g,"\\'")}', event)">
-            <span class="player-status-dot" style="background:${dot}"></span>
-            ${p}
-            <span class="player-filter-count">${pCount}</span>
-          </button>`;
-        }).join('')}
-      </div>` : '';
-
-    return `<button class="team-btn ${isActive ? 'active' : ''} ${outs[t] ? 'has-out' : ''}" data-team="${t}" onclick="filterTeam('${t}', this)">
-        <span class="team-dot"></span>
-        ${t.replace('Los Angeles','LA').replace('Golden State','GS').replace('Minnesota','MIN').replace('Oklahoma City','OKC').replace('Portland Trail','Portland').replace('Washington','WSH')}
-        <span class="team-count">${counts[t] || 0}</span>
-      </button>${playerDropdown}`;
-  }).join('');
-
+  const teamBtns = visibleTeams.map(t =>
+    `<button class="team-btn ${currentTeam === t ? 'active' : ''} ${outs[t] ? 'has-out' : ''}" data-team="${t}" onclick="filterTeam('${t}', this)">
+      <span class="team-dot"></span>
+      ${t.replace('Los Angeles','LA').replace('Golden State','GS').replace('Minnesota','MIN').replace('Oklahoma City','OKC').replace('Portland Trail','Portland').replace('Washington','WSH')}
+      <span class="team-count">${counts[t] || 0}</span>
+    </button>`
+  ).join('');
   document.getElementById('team-list').innerHTML = allBtn + teamBtns;
-}
-
-function filterPlayer(player, event) {
-  event.stopPropagation();
-  currentPlayer = currentPlayer === player ? 'all' : player;
-  applyFilters();
-  buildTeamList();
 }
 
 // ─── REPORTER SIDEBAR ─────────────────────────────────────────────────────────
@@ -2313,7 +2026,6 @@ function buildReporterSidebar() {
   document.getElementById('reporter-list').innerHTML = reps.map((r, i) => {
     const initials = r.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
     const isActive = activeReporter && activeReporter.handle === r.handle;
-    const twitterUrl = `https://x.com/${r.handle.replace('@','')}`;
     return `<div class="reporter-row ${isActive ? 'active-rep' : ''}"
       data-rep-idx="${i}"
       data-rep='${JSON.stringify({name:r.name,handle:r.handle,outlet:r.outlet,team:r.team,tier:r.tier,signal:r.signal,followers:r.followers,notes:r.notes||''}).replace(/'/g,"&#39;")}'
@@ -2323,10 +2035,7 @@ function buildReporterSidebar() {
       <div class="rep-avatar">${initials}</div>
       <div class="rep-info">
         <div class="rep-name">${r.name}</div>
-        <div class="rep-meta">
-          <a href="${twitterUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--accent);text-decoration:none;transition:opacity 0.1s" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">${r.handle}</a>
-          · ${r.outlet.split('/')[0].trim()}
-        </div>
+        <div class="rep-meta">${r.handle} · ${r.outlet.split('/')[0].trim()}</div>
       </div>
       <div class="rep-right">
         <span class="tier-pill tier-${r.tier}">T${r.tier}</span>
@@ -2347,14 +2056,17 @@ function showRepCard(e, el) {
   const signalColor = r.signal === 'High' ? 'var(--green)' : 'var(--orange)';
   const tierLabel = r.tier === 1 ? 'Tier 1 — Primary Source' : r.tier === 2 ? 'Tier 2 — Secondary' : 'Tier 3 — Supporting';
   const confLabel = r.team === 'All Teams' ? 'National' : r.conf === 'E' ? 'Eastern Conf.' : 'Western Conf.';
+  const xHandle = (r.handle || '').replace('@', '');
+  const xUrl = xHandle ? `https://x.com/${xHandle}` : '';
 
   card.innerHTML = `
     <div class="rhc-header">
       <div class="rhc-avatar">${initials}</div>
-      <div>
+      <div style="flex:1;min-width:0">
         <div class="rhc-name">${r.name}</div>
-        <a href="https://x.com/${r.handle.replace('@','')}" target="_blank" rel="noopener" class="rhc-handle" style="color:var(--accent);text-decoration:none" onclick="event.stopPropagation()">${r.handle} ↗</a>
+        <div class="rhc-handle">${r.handle}</div>
       </div>
+      ${xUrl ? `<a class="rhc-x-link" href="${xUrl}" target="_blank" rel="noopener">𝕏</a>` : ''}
     </div>
     <div class="rhc-rows">
       <div class="rhc-row"><span class="rhl">OUTLET</span><span class="rhv">${r.outlet.split('/')[0].trim()}</span></div>
@@ -2366,7 +2078,6 @@ function showRepCard(e, el) {
       <div class="rhc-row"><span class="rhl">FOLLOWERS</span><span class="rhv">${r.followers}</span></div>
     </div>
     ${r.notes ? `<div class="rhc-notes">${r.notes}</div>` : ''}
-    <div class="rhc-click-hint">CLICK TO VIEW TWEETS →</div>
   `;
 
   // Position: to the left of the sidebar
@@ -2375,7 +2086,7 @@ function showRepCard(e, el) {
   let left = rect.left - cardW - 10;
   if (left < 8) left = rect.right + 10;
   let top = rect.top - 10;
-  const maxTop = window.innerHeight - 400;
+  const maxTop = window.innerHeight - 420;
   if (top > maxTop) top = maxTop;
   if (top < 8) top = 8;
 
@@ -2387,8 +2098,12 @@ function showRepCard(e, el) {
 function hideRepCard() {
   repCardTimer = setTimeout(() => {
     document.getElementById('rep-hover-card').classList.remove('visible');
-  }, 120);
+  }, 200);
 }
+
+// Keep card visible when mouse moves onto it
+document.getElementById('rep-hover-card').addEventListener('mouseenter', () => clearTimeout(repCardTimer));
+document.getElementById('rep-hover-card').addEventListener('mouseleave', hideRepCard);
 
 // ─── REPORTER TWEET VIEW ──────────────────────────────────────────────────────
 function viewReporter(el) {
@@ -2396,11 +2111,9 @@ function viewReporter(el) {
   activeReporter = r;
   hideRepCard();
 
-  // Mark active row
   document.querySelectorAll('.reporter-row').forEach(row => row.classList.remove('active-rep'));
   el.classList.add('active-rep');
 
-  // Find reports by this reporter (by name or handle)
   const repReports = allReports.filter(report =>
     report.reporter === r.name ||
     report.handle === r.handle ||
@@ -2411,26 +2124,31 @@ function viewReporter(el) {
   const empty = document.getElementById('empty-state');
   empty.classList.remove('show');
 
-  // Update feed header
   const initials = r.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const signalColor = r.signal === 'High' ? 'var(--green)' : 'var(--orange)';
+  const xHandle = (r.handle || '').replace('@', '');
+  const xUrl = xHandle ? `https://x.com/${xHandle}` : '';
 
-  if (!repReports.length) {
-    // No matching reports in demo data — show profile + empty message
-    feed.innerHTML = `
-      <div class="reporter-view-header">
-        <button class="reporter-view-back" onclick="clearReporterView()">← BACK</button>
-        <div class="reporter-view-avatar">${initials}</div>
-        <div class="reporter-view-info">
-          <div class="rvi-name">${r.name.toUpperCase()}</div>
-          <div class="rvi-meta">${r.handle} · ${r.outlet} · ${r.team === 'All Teams' ? 'National' : r.team}</div>
-        </div>
-        <div class="reporter-view-stats">
-          <div class="rvs-cell"><div class="rvs-val" style="color:var(--accent)">T${r.tier}</div><div class="rvs-lbl">TIER</div></div>
-          <div class="rvs-cell"><div class="rvs-val">${r.followers}</div><div class="rvs-lbl">FOLLOWERS</div></div>
-          <div class="rvs-cell"><div class="rvs-val" style="color:${signalColor}">${r.signal.toUpperCase()}</div><div class="rvs-lbl">SIGNAL</div></div>
+  const profileHeader = `
+    <div class="reporter-view-header">
+      <button class="reporter-view-back" onclick="clearReporterView()">← BACK</button>
+      <div class="reporter-view-avatar">${initials}</div>
+      <div class="reporter-view-info">
+        <div class="rvi-name">${r.name.toUpperCase()}</div>
+        <div class="rvi-meta">
+          ${r.handle} · ${r.outlet} · ${r.team === 'All Teams' ? 'National' : r.team}
+          ${xUrl ? ` · <a class="rvi-x-link" href="${xUrl}" target="_blank" rel="noopener">View on 𝕏</a>` : ''}
         </div>
       </div>
+      <div class="reporter-view-stats">
+        <div class="rvs-cell"><div class="rvs-val" style="color:var(--accent)">T${r.tier}</div><div class="rvs-lbl">TIER</div></div>
+        <div class="rvs-cell"><div class="rvs-val">${r.followers}</div><div class="rvs-lbl">FOLLOWERS</div></div>
+        <div class="rvs-cell"><div class="rvs-val" style="color:${signalColor}">${r.signal.toUpperCase()}</div><div class="rvs-lbl">SIGNAL</div></div>
+      </div>
+    </div>`;
+
+  if (!repReports.length) {
+    feed.innerHTML = profileHeader + `
       <div style="padding:60px 24px;text-align:center">
         <div style="font-size:32px;opacity:0.3;margin-bottom:12px">📭</div>
         <div style="font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:2px;color:var(--text2);margin-bottom:8px">NO RECENT REPORTS</div>
@@ -2439,26 +2157,15 @@ function viewReporter(el) {
     return;
   }
 
-  feed.innerHTML = `
-    <div class="reporter-view-header">
-      <button class="reporter-view-back" onclick="clearReporterView()">← BACK</button>
-      <div class="reporter-view-avatar">${initials}</div>
-      <div class="reporter-view-info">
-        <div class="rvi-name">${r.name.toUpperCase()}</div>
-        <div class="rvi-meta">${r.handle} · ${r.outlet} · ${r.team === 'All Teams' ? 'National' : r.team}</div>
-      </div>
-      <div class="reporter-view-stats">
-        <div class="rvs-cell"><div class="rvs-val" style="color:var(--accent)">T${r.tier}</div><div class="rvs-lbl">TIER</div></div>
-        <div class="rvs-cell"><div class="rvs-val">${r.followers}</div><div class="rvs-lbl">FOLLOWERS</div></div>
-        <div class="rvs-cell"><div class="rvs-val" style="color:${signalColor}">${r.signal.toUpperCase()}</div><div class="rvs-lbl">SIGNAL</div></div>
-      </div>
-    </div>
-    ${repReports.map((report, idx) => {
+  feed.innerHTML = profileHeader +
+    repReports.map((report, idx) => {
       const isPrimary = report.reporter === r.name || report.handle === r.handle;
-      const [cScoreClass, cBarClass] = confClass(report.confidence);
-      const tierBonus = report.tier === 1 ? 40 : report.tier === 2 ? 25 : 10;
-      const signalBonus = report.tier === 1 ? 35 : 20;
-      const langBonus = Math.max(0, Math.round(report.confidence * 100) - tierBonus - signalBonus);
+      const bd = getConfBreakdown(report);
+      const confScore = Math.min(99, bd.tier + bd.outlet + bd.status + bd.lang + bd.signal + bd.corr);
+      const [cScoreClass, cBarClass] = confClass(confScore / 100);
+      const rawHandle = (report.handle || '').replace('@', '');
+      const tweetId = report.tweetId || report.source_id || '';
+      const tweetXUrl = (rawHandle && tweetId) ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
       return `<div class="injury-card" style="animation-delay:${idx * 40}ms">
         <div>
           <div class="card-header">
@@ -2482,6 +2189,7 @@ function viewReporter(el) {
                 <div class="reporter-handle">${report.handle} · ${report.outlet}</div>
               </div>
               <span class="tier-pill tier-${report.tier}">TIER ${report.tier}</span>
+              ${tweetXUrl ? `<a class="tweet-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View tweet on X">𝕏</a>` : ''}
             </div>
             <div class="tweet-text">"${report.tweet}"</div>
           </div>
@@ -2496,18 +2204,20 @@ function viewReporter(el) {
           </div>
         </div>
         <div class="conf-wrap">
-          <div class="conf-label-row"><span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score 0–100 based on reporter tier, outlet credibility, and tweet specificity.</span></span></div>
-          <div class="conf-score ${cScoreClass}">${Math.round(report.confidence * 100)}</div>
-          <div class="conf-bar-bg"><div class="conf-bar ${cBarClass}" style="width:${report.confidence * 100}%"></div></div>
+          <div class="conf-label-row"><span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score 0–100 across 6 factors.</span></span></div>
+          <div class="conf-score ${cScoreClass}">${confScore}</div>
+          <div class="conf-bar-bg"><div class="conf-bar ${cBarClass}" style="width:${confScore}%"></div></div>
           <div class="conf-breakdown">
-            Reporter tier &nbsp;<span>+${tierBonus}</span><br>
-            Injury signal &nbsp;<span>+${signalBonus}</span><br>
-            Tweet lang &nbsp;<span>+${langBonus}</span>
+            Reporter tier &nbsp;<span>+${bd.tier}</span><br>
+            Outlet cred &nbsp;<span>+${bd.outlet}</span><br>
+            Status &nbsp;<span>+${bd.status}</span><br>
+            Tweet precision &nbsp;<span>+${bd.lang}</span><br>
+            Injury signal &nbsp;<span>+${bd.signal}</span>
+            ${(report.corroborators || []).length ? `<br>Corroboration &nbsp;<span>+${bd.corr}</span>` : ''}
           </div>
         </div>
       </div>`;
-    }).join('')}
-  `;
+    }).join('');
 }
 
 function clearReporterView() {
@@ -2524,12 +2234,12 @@ function applyFilters() {
 
   filtered = allReports.filter(r => {
     const teamMatch = currentTeam === 'all' || r.team === currentTeam;
+    const playerMatch = currentPlayer === 'all' || r.player === currentPlayer;
     const statusMatch = currentStatus === 'all' || r.status === currentStatus;
     const confMatch = currentConf === 'all' || teamConf[r.team] === currentConf;
-    const playerMatch = currentPlayer === 'all' || r.player === currentPlayer;
     const q = searchQuery;
     const searchMatch = !q || [r.player, r.team, r.injury, r.body, r.status, r.reporter, r.handle, r.outlet, r.tweet].some(v => v && v.toLowerCase().includes(q));
-    return teamMatch && statusMatch && confMatch && playerMatch && searchMatch;
+    return teamMatch && playerMatch && statusMatch && confMatch && searchMatch;
   });
 
   const statusOrder = {Out:0, Doubtful:1, Questionable:2, 'Game-Time Decision':3, Probable:4};
@@ -2572,73 +2282,35 @@ function renderFeed() {
   empty.classList.remove('show');
 
   feed.innerHTML = filtered.map((r, idx) => {
-    const [cScoreClass, cBarClass] = confClass(r.confidence);
+    const bd = getConfBreakdown(r);
+    const confScore = Math.min(99, bd.tier + bd.outlet + bd.status + bd.lang + bd.signal + bd.corr);
+    const [cScoreClass, cBarClass] = confClass(confScore / 100);
     const isNew = newIds.has(r.id);
+    const expiryMs = newExpiry[r.id] || 0;
+    const secsLeft = isNew ? Math.max(0, Math.ceil((expiryMs - Date.now()) / 1000)) : 0;
+    const countdownStr = `${Math.floor(secsLeft / 60)}:${String(secsLeft % 60).padStart(2, '0')}`;
 
-    // ── Confidence breakdown ──────────────────────────────────────────────────
-    const reporter = REPORTERS.find(rep => rep.name === r.reporter) || { tier: r.tier || 2, signal: 'Medium', outlet: r.outlet || '' };
-    const bd = confBreakdown(reporter, r.status, r.tweet, (r.corroborators||[]).length);
-    const confBreakdownHtml = `
-      <div class="conf-factor"><span>Reporter tier</span><span>+${bd.tier}</span></div>
-      <div class="conf-factor"><span>Outlet credibility</span><span>+${bd.outlet}</span></div>
-      <div class="conf-factor"><span>Status specificity</span><span>+${bd.status}</span></div>
-      <div class="conf-factor"><span>Tweet precision</span><span>+${bd.lang}</span></div>
-      <div class="conf-factor"><span>Injury signal</span><span>+${bd.signal}</span></div>
-      ${bd.corr > 0 ? `<div class="conf-factor" style="color:var(--accent)"><span>Corroborated</span><span>+${bd.corr}</span></div>` : ''}
-    `;
+    // Tweet X link — only when we have both handle and a real tweet ID
+    const rawHandle = (r.handle || '').replace('@', '');
+    const tweetId = r.tweetId || r.source_id || '';
+    const tweetXUrl = (rawHandle && tweetId && !/^\d+$/.test(String(tweetId)) === false)
+      ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
 
-    // ── Tweet link ────────────────────────────────────────────────────────────
-    const handleClean = r.handle.replace('@','');
-    const tweetLink = r.tweetId
-      ? `https://x.com/${handleClean}/status/${r.tweetId}`
-      : `https://x.com/${handleClean}`;
-    const tweetLinkHtml = `<a href="${tweetLink}" target="_blank" rel="noopener" class="tweet-link" onclick="event.stopPropagation()">VIEW ON ✕</a>`;
-
-    // ── Corroboration ─────────────────────────────────────────────────────────
-    let corrobHtml = '';
-    if (r.corroborators && r.corroborators.length) {
-      const names = r.corroborators.join(', ');
-      const corrTweetRows = (r.corrobTweets || []).map(ct => {
-        const ctHandle = (ct.handle || '').replace('@','');
-        const ctLink = ct.tweetId ? `https://x.com/${ctHandle}/status/${ct.tweetId}` : `https://x.com/${ctHandle}`;
-        const ctInitials = (ct.reporter || '??').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
-        return `<div class="corr-tweet-row">
-          <div class="corr-tweet-avatar">${ctInitials}</div>
-          <div class="corr-tweet-body">
-            <div class="corr-tweet-meta">
-              ${ct.reporter || ct.handle}
-              ${ctHandle ? `<a href="${ctLink}" target="_blank" rel="noopener" style="color:var(--muted);font-size:8px;text-decoration:none" onclick="event.stopPropagation()">↗</a>` : ''}
-            </div>
-            <div class="corr-tweet-text">"${ct.tweet || '(no tweet text)'}"</div>
-          </div>
-        </div>`;
-      }).join('');
-      corrobHtml = `
-        <div class="corroboration" onclick="toggleCorroboration(this)">
-          <div class="corr-header">
-            <span class="corr-badge">✓ CORROBORATED</span>
-            <span class="corr-names">${names}</span>
-            <span class="corr-chevron">▼</span>
-          </div>
-          ${corrTweetRows ? `<div class="corr-tweets">${corrTweetRows}</div>` : ''}
-        </div>`;
-    }
-
-    // ── Player name — clickable if known ──────────────────────────────────────
-    const playerHtml = r.isKnownPlayer
-      ? `<div class="player-name player-name-link" onclick="openPlayerHistory('${r.player.replace(/'/g,"\\'")}', '${r.team.replace(/'/g,"\\'")}')">
-           ${r.player.toUpperCase()} <span style="font-size:10px;opacity:0.4;font-family:var(--font-mono)">↗</span>
-         </div>`
-      : `<div class="player-name">${r.player.toUpperCase()}</div>`;
+    const corrobHtml = r.corroborators && r.corroborators.length
+      ? `<div class="corroboration">
+          <span class="corr-label">ALSO CONFIRMED BY ·</span>
+          ${r.corroborators.map(c => `<span class="corr-source">${c}</span>`).join('')}
+        </div>`
+      : '';
 
     return `<div class="injury-card ${isNew ? 'is-new' : ''}" style="animation-delay:${idx * 35}ms">
       <div>
         <div class="card-header">
           <span class="status-pill ${statusPillClass(r.status)}">${r.status}</span>
           <span class="card-team-tag">${r.team.toUpperCase()}</span>
-          ${isNew ? `<span class="new-badge">● NEW</span>` : ''}
+          ${isNew ? `<span class="new-badge" data-expiry="${expiryMs}">● NEW <span class="new-countdown">${countdownStr}</span></span>` : ''}
         </div>
-        ${playerHtml}
+        <div class="player-name">${r.player.toUpperCase()}</div>
         <div class="injury-meta">
           <strong>${r.injury}</strong>
           <span class="dot">·</span>
@@ -2649,11 +2321,12 @@ function renderFeed() {
         <div class="tweet-box">
           <div class="tweet-top">
             <div class="avatar">${r.handle.slice(1,3).toUpperCase()}</div>
-            <div style="flex:1;min-width:0">
+            <div>
               <div class="reporter-name">${r.reporter}</div>
-              <a href="https://x.com/${handleClean}" target="_blank" rel="noopener" class="reporter-handle" style="color:var(--text2);text-decoration:none" onclick="event.stopPropagation()">${r.handle} · ${r.outlet}</a>
+              <div class="reporter-handle">${r.handle} · ${r.outlet}</div>
             </div>
             <span class="tier-pill tier-${r.tier}">TIER ${r.tier}</span>
+            ${tweetXUrl ? `<a class="tweet-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View tweet on X">𝕏</a>` : ''}
           </div>
           <div class="tweet-text">"${r.tweet}"</div>
         </div>
@@ -2661,71 +2334,81 @@ function renderFeed() {
         <div class="card-footer">
           <span class="card-time">${timeAgo(r.timestamp)}</span>
           <span class="outlet-tag">${r.outlet.split('/')[0].trim()}</span>
-          ${tweetLinkHtml}
         </div>
       </div>
       <div class="conf-wrap">
         <div class="conf-label-row">
-          <span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score based on reporter tier, outlet credibility, status specificity, tweet precision, and corroboration.</span></span>
+          <span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score 0–100 across 6 factors: reporter tier, outlet credibility, status specificity, tweet precision, injury signal, and corroboration.</span></span>
         </div>
-        <div class="conf-score ${cScoreClass}">${Math.round(r.confidence * 100)}</div>
+        <div class="conf-score ${cScoreClass}">${confScore}</div>
         <div class="conf-bar-bg">
-          <div class="conf-bar ${cBarClass}" style="width:${r.confidence * 100}%"></div>
+          <div class="conf-bar ${cBarClass}" style="width:${confScore}%"></div>
         </div>
-        <div class="conf-breakdown">${confBreakdownHtml}</div>
+        <div class="conf-breakdown">
+          Reporter tier &nbsp;<span>+${bd.tier}</span><br>
+          Outlet cred &nbsp;<span>+${bd.outlet}</span><br>
+          Status &nbsp;<span>+${bd.status}</span><br>
+          Tweet precision &nbsp;<span>+${bd.lang}</span><br>
+          Injury signal &nbsp;<span>+${bd.signal}</span>
+          ${(r.corroborators || []).length ? `<br>Corroboration &nbsp;<span>+${bd.corr}</span>` : ''}
+        </div>
       </div>
     </div>`;
   }).join('');
 }
 
-// ─── CORROBORATION TOGGLE ─────────────────────────────────────────────────────
-function toggleCorroboration(el) {
-  el.classList.toggle('open');
-}
-
-// ─── PLAYER HISTORY ───────────────────────────────────────────────────────────
-function openPlayerHistory(player, team) {
-  document.getElementById('phm-player-name').textContent = player.toUpperCase();
-  document.getElementById('phm-player-team').textContent = team.toUpperCase();
-  const key = player.toLowerCase();
-  const history = playerHistory[key] || [];
-  const body = document.getElementById('phm-body');
-  if (!history.length) {
-    body.innerHTML = `<div class="phm-empty">No tweet history stored yet for ${player}.<br>Reports will appear here as they come in.</div>`;
-  } else {
-    body.innerHTML = history.map(r => {
-      const handleClean = (r.handle || '').replace('@','');
-      const tweetLink = r.tweetId ? `https://x.com/${handleClean}/status/${r.tweetId}` : `https://x.com/${handleClean}`;
-      const [csc] = confClass(r.confidence);
-      return `<div class="phm-tweet">
-        <div class="phm-tweet-meta">
-          <span class="status-pill ${statusPillClass(r.status)}" style="font-size:9px;padding:2px 7px">${r.status}</span>
-          <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">${timeAgo(r.timestamp)}</span>
-          <span class="conf-score ${csc}" style="font-size:11px;width:28px;height:28px">${Math.round(r.confidence*100)}</span>
-        </div>
-        <div class="phm-tweet-text">"${r.tweet}"</div>
-        <div class="phm-tweet-footer">
-          <span style="font-family:var(--font-mono);font-size:9px;color:var(--accent)">${r.reporter}</span>
-          <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">${r.outlet}</span>
-          <a href="${tweetLink}" target="_blank" rel="noopener" class="tweet-link" style="margin-left:auto">VIEW ↗</a>
-        </div>
-      </div>`;
-    }).join('');
-  }
-  document.getElementById('player-history-overlay').classList.add('open');
-}
-
-function closePlayerHistory(event) {
-  if (event && event.target !== document.getElementById('player-history-overlay')) return;
-  document.getElementById('player-history-overlay').classList.remove('open');
-}
-
 // ─── CONTROLS ────────────────────────────────────────────────────────────────
 function filterTeam(team, btn) {
   currentTeam = team;
-  document.querySelectorAll('.team-btn').forEach(b => b.classList.remove('active'));
+  currentPlayer = 'all';
+  // Only touch .team-btn elements (NOT .player-btn)
+  document.querySelectorAll('#team-list .team-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   document.getElementById('feed-title').textContent = team === 'all' ? 'INJURY FEED' : team.toUpperCase();
+  buildPlayerFilter(team);
+  applyFilters();
+}
+
+function buildPlayerFilter(team) {
+  const wrap = document.getElementById('player-filter-wrap');
+  const list = document.getElementById('player-list');
+  if (team === 'all') { wrap.style.display = 'none'; return; }
+  const players = [...new Set(
+    allReports
+      .filter(r => r.team === team && r.player && r.player !== 'Unknown Player' && r.player !== 'Unknown')
+      .map(r => r.player)
+  )].sort();
+  if (!players.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  list.innerHTML =
+    `<button class="player-btn active" onclick="filterPlayer('all', this)">All Players</button>` +
+    players.map(p =>
+      `<button class="player-btn" onclick="filterPlayer(${JSON.stringify(p)}, this)">${p}</button>`
+    ).join('');
+}
+
+function filterPlayer(player, btn) {
+  currentPlayer = player;
+  document.querySelectorAll('#player-list .player-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyFilters();
+}
+
+function resetFilters() {
+  currentTeam = 'all';
+  currentPlayer = 'all';
+  currentStatus = 'all';
+  currentConf = 'all';
+  currentSort = 'time';
+  searchQuery = '';
+  const searchEl = document.getElementById('search-input');
+  if (searchEl) searchEl.value = '';
+  document.getElementById('player-filter-wrap').style.display = 'none';
+  document.getElementById('feed-title').textContent = 'INJURY FEED';
+  buildTeamList();
+  document.querySelectorAll('[data-status]').forEach((b, i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('.conf-toggle button').forEach((b, i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('.sort-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
   applyFilters();
 }
 
@@ -2757,32 +2440,14 @@ function searchFeed(q) {
 }
 
 // ─── LIVE PUSH ────────────────────────────────────────────────────────────────
-function storePlayerHistory(report) {
-  if (!report.player || report.player === 'Unknown Player') return;
-  const key = report.player.toLowerCase();
-  if (!playerHistory[key]) playerHistory[key] = [];
-  // Avoid exact duplicates by tweet id
-  if (!playerHistory[key].find(r => r.id === report.id)) {
-    playerHistory[key].unshift(report);
-    if (playerHistory[key].length > 50) playerHistory[key].pop(); // cap at 50
-  }
-}
-
 function pushNewReport(t) {
-  const reporter = REPORTERS.find(r => r.name === t.reporter) || { tier: 2, signal: 'Medium', outlet: t.outlet || '' };
-  const confidence = calcConfidence(reporter, t.status, t.tweet || '', (t.corroborators || []).length);
-  const newReport = {
-    ...t,
-    id: t.id || `local-${Date.now()}-${Math.random()}`,
-    timestamp: new Date(),
-    confidence,
-    isKnownPlayer: NBA_PLAYER_SET.has((t.player || '').toLowerCase()),
-  };
+  const now = Date.now();
+  const expiryMs = now + 900000; // 15 min from now (tweet is being created right now)
+  const newReport = { ...t, id: allReports.length, timestamp: new Date(now) };
   allReports.unshift(newReport);
-  storePlayerHistory(newReport);
   newIds.add(newReport.id);
-  newExpiry[newReport.id] = Date.now() + 300000;
-  setTimeout(() => { newIds.delete(newReport.id); delete newExpiry[newReport.id]; renderFeed(); }, 300000);
+  newExpiry[newReport.id] = expiryMs;
+  setTimeout(() => { newIds.delete(newReport.id); delete newExpiry[newReport.id]; renderFeed(); }, 900000);
   buildTicker();
   applyFilters();
   document.getElementById('last-update').textContent = 'just now';
@@ -2791,6 +2456,14 @@ function pushNewReport(t) {
 function updateTimestamps() {
   document.querySelectorAll('.card-time').forEach((el, i) => {
     if (filtered[i]) el.textContent = timeAgo(filtered[i].timestamp);
+  });
+  // Tick NEW badge countdowns
+  document.querySelectorAll('.new-badge[data-expiry]').forEach(badge => {
+    const expiry = parseInt(badge.dataset.expiry, 10);
+    const secsLeft = Math.max(0, Math.ceil((expiry - Date.now()) / 1000));
+    const cd = badge.querySelector('.new-countdown');
+    if (cd) cd.textContent = `${Math.floor(secsLeft / 60)}:${String(secsLeft % 60).padStart(2, '0')}`;
+    if (secsLeft === 0) badge.style.display = 'none';
   });
   const diff = Math.floor((Date.now() - (allReports[0]?.timestamp || Date.now())) / 60000);
   document.getElementById('last-update').textContent = diff < 1 ? 'just now' : `${diff}m ago`;
