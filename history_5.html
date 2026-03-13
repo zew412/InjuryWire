@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>InjuryWire — Historical Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080a0d;
+  --surface: #0e1117;
+  --surface2: #141820;
+  --surface3: #1a2030;
+  --border: #1c2232;
+  --border2: #232d40;
+  --text: #dde4f0;
+  --text2: #9aaac2;
+  --muted: #4d5e7a;
+  --accent: #00c8ff;
+  --accent-dim: rgba(0,200,255,0.07);
+  --accent-glow: rgba(0,200,255,0.18);
+  --red: #ff3d5a;
+  --red-dim: rgba(255,61,90,0.09);
+  --orange: #ff8c1a;
+  --orange-dim: rgba(255,140,26,0.09);
+  --yellow: #ffd447;
+  --yellow-dim: rgba(255,212,71,0.09);
+  --green: #00e676;
+  --green-dim: rgba(0,230,118,0.09);
+  --pink: #ff5fc4;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 6px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* NOISE OVERLAY — identical to main dashboard */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.4;
+}
+
+/* ── HEADER — copied exactly from index ── */
+header {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(8,10,13,0.94); backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  height: 54px; display: flex; align-items: center;
+  padding: 0 20px; gap: 20px;
+}
+.logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.logo-mark {
+  width: 28px; height: 28px; background: var(--accent); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 900; font-size: 16px;
+  color: #000; letter-spacing: -1px; flex-shrink: 0;
+}
+.logo-text {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 22px; letter-spacing: 3px; color: var(--text); text-transform: uppercase;
+}
+.logo-badge {
+  font-family: var(--font-mono); font-size: 9px; color: var(--accent);
+  border: 1px solid rgba(0,200,255,0.3); padding: 2px 6px; border-radius: 3px; letter-spacing: 2px;
+}
+.header-right {
+  display: flex; align-items: center; gap: 16px; margin-left: auto; flex-shrink: 0;
+}
+
+/* ── NAV BUTTON — CSS class only, no inline handlers ── */
+.header-nav-btn {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
+  color: var(--muted); text-decoration: none;
+  border: 1px solid var(--border2); padding: 4px 12px; border-radius: 3px;
+  transition: color 0.12s, border-color 0.12s;
+}
+.header-nav-btn:hover { color: var(--accent); border-color: rgba(0,200,255,0.3); }
+
+/* DB status pill — mirrors live-badge style */
+.db-status {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+  letter-spacing: 1px;
+  background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.2);
+  padding: 4px 10px; border-radius: 20px;
+  opacity: 0.5; transition: opacity 0.3s;
+}
+.db-status.live { color: var(--green); opacity: 1; }
+.db-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex-shrink: 0;
+}
+.db-dot.live { background: var(--green); animation: pulse-green 2.2s infinite; }
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,230,118,0.5); }
+  50% { box-shadow: 0 0 0 5px rgba(0,230,118,0); }
+}
+
+/* ── PAGE BODY ── */
+.page { max-width: 1300px; margin: 0 auto; padding: 24px 20px; }
+
+/* ── SEARCH HERO ── */
+.search-hero {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px 28px; margin-bottom: 20px;
+}
+.hero-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 26px; letter-spacing: 3px; color: var(--text); margin-bottom: 2px;
+}
+.hero-sub { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; margin-bottom: 18px; }
+.search-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.search-input-wrap { position: relative; flex: 1; min-width: 220px; }
+.search-input-wrap input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 8px 14px 8px 34px;
+  color: var(--text); font-family: var(--font-mono); font-size: 11px;
+  outline: none; transition: border-color 0.2s;
+}
+.search-input-wrap input:focus { border-color: var(--accent); }
+.search-input-wrap input::placeholder { color: var(--muted); }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; }
+
+.autocomplete-list {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--surface3); border: 1px solid rgba(0,200,255,0.2);
+  border-radius: var(--radius); z-index: 100; max-height: 200px; overflow-y: auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+}
+.autocomplete-item {
+  padding: 8px 14px; font-family: var(--font-mono); font-size: 11px;
+  color: var(--text2); cursor: pointer; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover, .autocomplete-item.selected { background: var(--accent-dim); color: var(--text); }
+.autocomplete-team { font-size: 9px; color: var(--muted); }
+
+.filter-select {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 8px 12px; color: var(--text2);
+  font-family: var(--font-mono); font-size: 11px; outline: none; cursor: pointer;
+  transition: border-color 0.2s; min-width: 130px;
+}
+.filter-select:focus { border-color: var(--accent); }
+
+.search-btn {
+  background: var(--accent); color: #000; border: none; border-radius: var(--radius);
+  padding: 8px 18px; font-family: var(--font-display); font-weight: 700;
+  font-size: 14px; letter-spacing: 1px; cursor: pointer; transition: opacity 0.12s; white-space: nowrap;
+}
+.search-btn:hover { opacity: 0.88; }
+.clear-btn {
+  background: none; border: 1px solid var(--border2); border-radius: var(--radius);
+  padding: 8px 14px; color: var(--muted); font-family: var(--font-mono);
+  font-size: 11px; cursor: pointer; transition: all 0.12s; white-space: nowrap;
+}
+.clear-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── STATS BAR — matches index .stats-bar exactly ── */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; margin-bottom: 20px; overflow: hidden;
+}
+.stat-cell {
+  padding: 14px 20px; border-right: 1px solid var(--border);
+  text-align: center; position: relative; transition: background 0.15s;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:hover { background: var(--surface2); }
+.stat-val {
+  font-family: var(--font-display); font-weight: 700; font-size: 30px;
+  letter-spacing: 1px; line-height: 1; margin-bottom: 3px;
+}
+.stat-lbl {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 2px; color: var(--muted); text-transform: uppercase;
+}
+.v-red { color: var(--red); }
+.v-orange { color: var(--orange); }
+.v-yellow { color: var(--yellow); }
+.v-green { color: var(--green); }
+.v-accent { color: var(--accent); }
+
+/* ── MAIN GRID ── */
+.main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+
+/* ── RESULTS PANEL ── */
+.results-panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.panel-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface);
+}
+.panel-title { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: 2px; }
+.panel-meta { display: flex; align-items: center; gap: 12px; }
+.panel-count { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+.export-btn {
+  font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+  background: none; border: 1px solid var(--border2); border-radius: 3px;
+  padding: 4px 10px; cursor: pointer; letter-spacing: 0.5px; transition: all 0.12s;
+}
+.export-btn:hover { color: var(--accent); border-color: rgba(0,200,255,0.3); }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 1.5px;
+  color: var(--muted); text-transform: uppercase; text-align: left;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  background: var(--surface2); white-space: nowrap;
+  cursor: pointer; user-select: none; transition: color 0.12s;
+}
+thead th:hover { color: var(--text2); }
+thead th.sorted { color: var(--accent); }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+tbody tr.row-expanded { background: var(--accent-dim); border-left: 2px solid var(--accent); }
+td { padding: 11px 14px; font-size: 13px; vertical-align: middle; white-space: nowrap; }
+
+.td-player { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.td-pos { font-family: var(--font-mono); font-size: 9px; color: var(--muted); display: block; margin-top: 1px; }
+.td-team { font-family: var(--font-mono); font-size: 10px; color: var(--text2); }
+.td-time { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+.td-conf { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+.td-reporter { font-family: var(--font-mono); font-size: 10px; color: var(--text2); }
+
+/* Status pills — match index exactly */
+.sp {
+  display: inline-flex; align-items: center;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 10px; letter-spacing: 1.5px;
+  padding: 2px 8px; border-radius: 3px; white-space: nowrap; text-transform: uppercase;
+}
+.sp-out      { background: var(--red-dim);            color: var(--red);    border: 1px solid rgba(255,61,90,0.2); }
+.sp-q        { background: var(--orange-dim);          color: var(--orange); border: 1px solid rgba(255,140,26,0.2); }
+.sp-d        { background: rgba(255,143,163,0.09);     color: #ff8fa3;       border: 1px solid rgba(255,143,163,0.2); }
+.sp-gtd      { background: var(--yellow-dim);          color: var(--yellow); border: 1px solid rgba(255,212,71,0.2); }
+.sp-prob     { background: var(--green-dim);           color: var(--green);  border: 1px solid rgba(0,230,118,0.2); }
+
+.status-change { display: flex; align-items: center; gap: 5px; }
+.change-arrow { color: var(--muted); font-size: 10px; }
+
+/* Expanded tweet row */
+.tweet-expand-row td {
+  background: var(--surface2); padding: 14px 20px 16px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text2);
+  line-height: 1.7; white-space: normal; border-bottom: 1px solid var(--border);
+}
+.tweet-expand-meta { display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.tem-item { font-size: 9px; color: var(--muted); letter-spacing: 0.5px; }
+.tem-item span { color: var(--text2); }
+
+/* Empty / loading */
+.empty-state { padding: 60px 24px; text-align: center; display: none; }
+.empty-state.show { display: block; }
+.empty-icon { font-size: 36px; opacity: 0.3; margin-bottom: 14px; }
+.empty-title { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: 2px; color: var(--text2); margin-bottom: 8px; }
+.empty-sub { font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1.7; }
+
+.skel {
+  background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite;
+  border-radius: 4px; height: 12px; margin-bottom: 0;
+}
+@keyframes shimmer { from{background-position:200% 0} to{background-position:-200% 0} }
+
+/* Pagination */
+.pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 14px; border-top: 1px solid var(--border);
+}
+.page-btn {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px;
+  background: none; border: 1px solid var(--border2);
+  border-radius: 3px; padding: 4px 10px; color: var(--muted);
+  cursor: pointer; transition: all 0.12s;
+}
+.page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.page-btn.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(0,200,255,0.3); }
+.page-btn:disabled { opacity: 0.3; cursor: default; }
+.page-info { font-family: var(--font-mono); font-size: 10px; color: var(--muted); padding: 0 6px; }
+
+/* ── SIDE PANEL ── */
+.side-panel { display: flex; flex-direction: column; gap: 16px; }
+.info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.info-card-header {
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 2.5px;
+  color: var(--muted); text-transform: uppercase;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.info-card-body { padding: 14px 16px; }
+
+/* Player profile */
+.pp-name { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: 1px; line-height: 1; margin-bottom: 4px; }
+.pp-meta { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-bottom: 14px; }
+.profile-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ps-cell { background: var(--surface2); border-radius: 6px; padding: 10px 12px; }
+.ps-val { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1; }
+.ps-lbl { font-family: var(--font-mono); font-size: 8px; color: var(--muted); letter-spacing: 1px; margin-top: 3px; }
+
+/* Timeline */
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.tl-item:last-child { border-bottom: none; }
+.tl-dot-wrap { display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border2); }
+.tl-line { width: 1px; flex: 1; background: var(--border); margin: 3px 0; min-height: 16px; }
+.tl-status { font-family: var(--font-mono); font-size: 9px; font-weight: 700; margin-bottom: 2px; }
+.tl-time { font-family: var(--font-mono); font-size: 9px; color: var(--muted); margin-bottom: 2px; }
+.tl-reporter { font-family: var(--font-mono); font-size: 9px; color: var(--text2); }
+
+/* Top reporters */
+.rep-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.rep-row:last-child { border-bottom: none; }
+.rep-initials {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--surface3); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 9px; color: var(--accent);
+}
+.rep-rname { font-size: 12px; font-weight: 600; line-height: 1.2; }
+.rep-routlet { font-family: var(--font-mono); font-size: 9px; color: var(--muted); }
+.rep-count { margin-left: auto; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--accent); flex-shrink: 0; }
+
+/* Body breakdown */
+.bd-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.bd-row:last-child { border-bottom: none; }
+.bd-label { font-family: var(--font-mono); font-size: 10px; color: var(--text2); flex: 1; text-transform: capitalize; }
+.bd-bar-bg { flex: 2; height: 4px; background: var(--border2); border-radius: 2px; overflow: hidden; }
+.bd-bar { height: 100%; border-radius: 2px; background: var(--accent); transition: width 0.6s ease; }
+.bd-num { font-family: var(--font-mono); font-size: 10px; color: var(--muted); min-width: 20px; text-align: right; }
+
+/* Responsive */
+@media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .stats-bar { grid-template-columns: repeat(3, 1fr); } .search-row { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+<div class="rep-hover-card" id="rep-hover-card" style="display:none"></div>
+
+<!-- HEADER — identical markup to index.html -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">IW</div>
+    <span class="logo-text">INJURYWIRE</span>
+    <span class="logo-badge">NBA · BETA</span>
+  </div>
+  <div class="header-right">
+    <a href="index.html?v=2" class="header-nav-btn">← LIVE FEED</a>
+    <div class="db-status" id="db-status">
+      <div class="db-dot" id="db-dot"></div>
+      <span id="db-status-text">CONNECTING</span>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- SEARCH HERO -->
+  <div class="search-hero">
+    <div class="hero-title">HISTORICAL DATA</div>
+    <div class="hero-sub">SEARCH · FILTER · EXPORT · EVERY REPORT SINCE DAY ONE</div>
+    <div class="search-row">
+      <div class="search-input-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="player-search" placeholder="Search player name..." autocomplete="off"
+          oninput="onSearchInput(this.value)" onkeydown="onSearchKey(event)">
+        <div class="autocomplete-list" id="autocomplete" style="display:none"></div>
+      </div>
+      <select class="filter-select" id="filter-team" onchange="runQuery()">
+        <option value="">All Teams</option>
+      </select>
+      <select class="filter-select" id="filter-status" onchange="runQuery()">
+        <option value="">All Statuses</option>
+        <option value="Out">Out</option>
+        <option value="Questionable">Questionable</option>
+        <option value="Doubtful">Doubtful</option>
+        <option value="Game-Time Decision">Game-Time Decision</option>
+        <option value="Probable">Probable</option>
+      </select>
+      <select class="filter-select" id="filter-days" onchange="runQuery()">
+        <option value="7">Last 7 days</option>
+        <option value="14">Last 14 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="60">Last 60 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="365">All time</option>
+      </select>
+      <button class="search-btn" onclick="runQuery()">SEARCH</button>
+      <button class="clear-btn" onclick="clearSearch()">CLEAR</button>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-cell"><div class="stat-val v-accent" id="s-total">—</div><div class="stat-lbl">Total Reports</div></div>
+    <div class="stat-cell"><div class="stat-val v-red" id="s-out">—</div><div class="stat-lbl">Out</div></div>
+    <div class="stat-cell"><div class="stat-val v-orange" id="s-q">—</div><div class="stat-lbl">Questionable</div></div>
+    <div class="stat-cell"><div class="stat-val v-yellow" id="s-gtd">—</div><div class="stat-lbl">Game-Time</div></div>
+    <div class="stat-cell"><div class="stat-val v-green" id="s-players">—</div><div class="stat-lbl">Unique Players</div></div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- TABLE -->
+    <div class="results-panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title" id="panel-title">ALL REPORTS</div>
+          <div class="panel-count" id="panel-count">Loading...</div>
+        </div>
+        <div class="panel-meta">
+          <button class="export-btn" onclick="exportCSV()">↓ EXPORT CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="results-table">
+          <thead>
+            <tr>
+              <th onclick="sortBy('player')">PLAYER <span id="s-player">↕</span></th>
+              <th onclick="sortBy('team')">TEAM <span id="s-team">↕</span></th>
+              <th onclick="sortBy('status')">STATUS <span id="s-status">↕</span></th>
+              <th onclick="sortBy('body_part')">INJURY <span id="s-body">↕</span></th>
+              <th onclick="sortBy('time_of_report')">REPORTED <span id="s-time">↓</span></th>
+              <th onclick="sortBy('confidence')">CONF <span id="s-conf">↕</span></th>
+              <th onclick="sortBy('reporter')">REPORTER <span id="s-rep">↕</span></th>
+              <th onclick="sortBy('days_since_last_report')">DAYS SINCE PRIOR <span id="s-days">↕</span></th>
+            </tr>
+          </thead>
+          <tbody id="results-body">
+            <tr><td><div class="skel" style="width:120px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:28px"></div></td><td><div class="skel" style="width:100px"></div></td><td><div class="skel" style="width:40px"></div></td></tr>
+            <tr><td><div class="skel" style="width:140px"></div></td><td><div class="skel" style="width:90px"></div></td><td><div class="skel" style="width:60px"></div></td><td><div class="skel" style="width:90px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:28px"></div></td><td><div class="skel" style="width:110px"></div></td><td><div class="skel" style="width:30px"></div></td></tr>
+            <tr><td><div class="skel" style="width:110px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:60px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:28px"></div></td><td><div class="skel" style="width:90px"></div></td><td><div class="skel" style="width:50px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">📂</div>
+        <div class="empty-title">NO REPORTS FOUND</div>
+        <div class="empty-sub" id="empty-sub">Try expanding the date range or clearing your filters.</div>
+      </div>
+      <div class="pagination" id="pagination" style="display:none">
+        <button class="page-btn" id="btn-prev" onclick="changePage(-1)">← PREV</button>
+        <span class="page-info" id="page-info"></span>
+        <button class="page-btn" id="btn-next" onclick="changePage(1)">NEXT →</button>
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="side-panel">
+
+      <!-- Player profile (visible when player searched) -->
+      <div class="info-card" id="player-card" style="display:none">
+        <div class="info-card-header">PLAYER PROFILE</div>
+        <div class="info-card-body">
+          <div class="pp-name" id="pp-name">—</div>
+          <div class="pp-meta" id="pp-meta">—</div>
+          <div class="profile-stats">
+            <div class="ps-cell"><div class="ps-val v-accent" id="pp-total">0</div><div class="ps-lbl">Total Reports</div></div>
+            <div class="ps-cell"><div class="ps-val v-red" id="pp-out">0</div><div class="ps-lbl">Times Out</div></div>
+            <div class="ps-cell"><div class="ps-val v-orange" id="pp-avg">—</div><div class="ps-lbl">Avg Days Between</div></div>
+            <div class="ps-cell"><div class="ps-val" id="pp-last" style="font-size:13px;padding-top:3px">—</div><div class="ps-lbl">Last Status</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status timeline (visible when player searched) -->
+      <div class="info-card" id="timeline-card" style="display:none">
+        <div class="info-card-header">STATUS TIMELINE</div>
+        <div class="info-card-body" style="padding:8px 16px">
+          <div class="timeline" id="timeline-list"></div>
+        </div>
+      </div>
+
+      <!-- Top reporters -->
+      <div class="info-card">
+        <div class="info-card-header">TOP REPORTERS <span id="rp-period" style="color:var(--border2)">LAST 30 DAYS</span></div>
+        <div class="info-card-body" style="padding:6px 16px">
+          <div id="top-reporters-list"><div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:10px 0">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- Injury breakdown -->
+      <div class="info-card">
+        <div class="info-card-header">INJURY BREAKDOWN</div>
+        <div class="info-card-body" style="padding:6px 16px">
+          <div id="injury-breakdown"><div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:10px 0">Loading...</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://injurywire-pipeline-production.up.railway.app';
+
+const ALL_TEAMS = ["Atlanta Hawks","Boston Celtics","Brooklyn Nets","Charlotte Hornets","Chicago Bulls","Cleveland Cavaliers","Dallas Mavericks","Denver Nuggets","Detroit Pistons","Golden State Warriors","Houston Rockets","Indiana Pacers","LA Clippers","Los Angeles Lakers","Memphis Grizzlies","Miami Heat","Milwaukee Bucks","Minnesota Timberwolves","New Orleans Pelicans","New York Knicks","Oklahoma City Thunder","Orlando Magic","Philadelphia 76ers","Phoenix Suns","Portland Trail Blazers","Sacramento Kings","San Antonio Spurs","Toronto Raptors","Utah Jazz","Washington Wizards"];
+
+// Populate team dropdown
+ALL_TEAMS.forEach(t => {
+  const o = document.createElement('option'); o.value = t; o.textContent = t;
+  document.getElementById('filter-team').appendChild(o);
+});
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let allData = [];
+let filtered = [];
+let sortCol = 'time_of_report';
+let sortDir = -1;
+let currentPage = 1;
+const PAGE_SIZE = 50;
+let expandedRow = null;
+
+// ─── FETCH ────────────────────────────────────────────────────────────────────
+async function runQuery() {
+  const player = document.getElementById('player-search').value.trim();
+  const team   = document.getElementById('filter-team').value;
+  const status = document.getElementById('filter-status').value;
+  const days   = document.getElementById('filter-days').value;
+
+  document.getElementById('panel-title').textContent = player ? player.toUpperCase() : 'ALL REPORTS';
+  setLoading();
+
+  try {
+    let url;
+    if (player) {
+      url = `${API_URL}/v1/players/${encodeURIComponent(player)}`;
+    } else {
+      const p = new URLSearchParams({ days, limit: 500 });
+      if (team)   p.set('team', team);
+      if (status) p.set('status', status);
+      url = `${API_URL}/v1/injuries/history?${p}`;
+    }
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    allData = (data.injuries || data.reports || []).map(normalise);
+
+    filtered = allData.filter(r => {
+      const tm = !team   || r.team === team;
+      const st = !status || r.status === status;
+      return tm && st;
+    });
+
+    setDbLive();
+    updateStats();
+    updateSidePanel(player);
+    buildTopReporters();
+    buildBreakdown();
+    currentPage = 1;
+    expandedRow = null;
+    renderTable();
+    document.getElementById('panel-count').textContent = `${filtered.length} report${filtered.length !== 1 ? 's' : ''}`;
+  } catch (err) {
+    console.error(err);
+    setDbError();
+    showEmpty('Failed to load data. Check API connection.');
+  }
+}
+
+function normalise(r) {
+  const conf = typeof r.confidence === 'number'
+    ? (r.confidence > 1 ? r.confidence : Math.round(r.confidence * 100))
+    : null;
+  return {
+    ...r,
+    time_of_report: r.time_of_report || r.timestamp || r.created_at,
+    body_part: r.body_part || r.body || '',
+    injury_type: r.injury_type || '',
+    position: r.position || '',
+    prev_status: r.prev_status || null,
+    days_since_last_report: r.days_since_last_report ?? null,
+    confidence: conf,
+    corroborators: r.corroborators || [],
+  };
+}
+
+// ─── TABLE ────────────────────────────────────────────────────────────────────
+const SORT_COLS = ['player','team','status','body_part','time_of_report','confidence','reporter','days_since_last_report'];
+const SORT_IDS  = ['s-player','s-team','s-status','s-body','s-time','s-conf','s-rep','s-days'];
+
+function renderTable() {
+  const tbody  = document.getElementById('results-body');
+  const empty  = document.getElementById('empty-state');
+  const pager  = document.getElementById('pagination');
+
+  if (!filtered.length) {
+    tbody.innerHTML = '';
+    empty.classList.add('show');
+    pager.style.display = 'none';
+    return;
+  }
+  empty.classList.remove('show');
+
+  // Sort
+  const statusOrder = {Out:0,Doubtful:1,Questionable:2,'Game-Time Decision':3,Probable:4};
+  const sorted = [...filtered].sort((a, b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (sortCol === 'time_of_report') { av = new Date(av||0); bv = new Date(bv||0); }
+    if (sortCol === 'status') { av = statusOrder[av]??5; bv = statusOrder[bv]??5; }
+    if (av == null) return 1; if (bv == null) return -1;
+    return av < bv ? sortDir : av > bv ? -sortDir : 0;
+  });
+
+  // Update arrows
+  SORT_COLS.forEach((c, i) => {
+    const el = document.getElementById(SORT_IDS[i]);
+    if (el) el.textContent = c === sortCol ? (sortDir === -1 ? '↓' : '↑') : '↕';
+  });
+
+  // Paginate
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  currentPage = Math.min(currentPage, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page  = sorted.slice(start, start + PAGE_SIZE);
+
+  document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById('btn-prev').disabled = currentPage <= 1;
+  document.getElementById('btn-next').disabled = currentPage >= totalPages;
+  pager.style.display = totalPages > 1 ? 'flex' : 'none';
+
+  tbody.innerHTML = page.map((r, i) => {
+    const gi = start + i;
+    const spCls = spClass(r.status);
+    const confColor = r.confidence >= 85 ? 'var(--green)' : r.confidence >= 70 ? 'var(--orange)' : 'var(--red)';
+    const prevHtml = r.prev_status && r.prev_status !== r.status
+      ? `<div class="status-change"><span class="sp ${spClass(r.prev_status)}" style="font-size:8px;padding:1px 5px">${r.prev_status}</span><span class="change-arrow">→</span><span class="sp ${spCls}">${r.status}</span></div>`
+      : `<span class="sp ${spCls}">${r.status}</span>`;
+    const isExp = expandedRow === gi;
+    const injLabel = [r.injury_type && r.injury_type !== 'Undisclosed' ? r.injury_type : '', r.body_part].filter(Boolean).join(' · ') || '—';
+    const daysVal = r.days_since_last_report !== null && r.days_since_last_report !== undefined ? r.days_since_last_report + 'd' : '—';
+
+    return `<tr onclick="toggleRow(${gi})" class="${isExp ? 'row-expanded' : ''}">
+      <td><span class="td-player">${r.player || '—'}</span>${r.position ? `<span class="td-pos">${r.position}</span>` : ''}</td>
+      <td class="td-team">${shortTeam(r.team)}</td>
+      <td>${prevHtml}</td>
+      <td style="font-family:var(--font-mono);font-size:10px;text-transform:capitalize">${injLabel}</td>
+      <td class="td-time">${fmtTime(r.time_of_report)}</td>
+      <td class="td-conf" style="color:${confColor}">${r.confidence ?? '—'}</td>
+      <td class="td-reporter">${r.reporter || '—'}</td>
+      <td style="font-family:var(--font-mono);font-size:10px;color:${daysColor(r.days_since_last_report)}">${daysVal}</td>
+    </tr>
+    ${isExp ? `<tr class="tweet-expand-row"><td colspan="8">
+      <div>"${r.tweet_text || r.tweet || 'No tweet text available.'}"</div>
+      <div class="tweet-expand-meta">
+        <div class="tem-item">OUTLET <span>${r.outlet||'—'}</span></div>
+        <div class="tem-item">TIER <span>${r.tier||'—'}</span></div>
+        ${r.matchup ? `<div class="tem-item">MATCHUP <span>${r.matchup}</span></div>` : ''}
+        ${r.game_time ? `<div class="tem-item">TIP-OFF <span>${r.game_time}</span></div>` : ''}
+        ${(r.corroborators||[]).length ? `<div class="tem-item">CONFIRMED BY <span>${r.corroborators.join(', ')}</span></div>` : ''}
+      </div>
+    </td></tr>` : ''}`;
+  }).join('');
+}
+
+function toggleRow(gi) {
+  expandedRow = expandedRow === gi ? null : gi;
+  renderTable();
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = -1; }
+  currentPage = 1;
+  renderTable();
+}
+
+function changePage(dir) {
+  currentPage += dir;
+  expandedRow = null;
+  renderTable();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── STATS ────────────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('s-total').textContent   = filtered.length;
+  document.getElementById('s-out').textContent     = filtered.filter(r => r.status === 'Out').length;
+  document.getElementById('s-q').textContent       = filtered.filter(r => r.status === 'Questionable').length;
+  document.getElementById('s-gtd').textContent     = filtered.filter(r => r.status === 'Game-Time Decision').length;
+  document.getElementById('s-players').textContent = new Set(filtered.map(r => r.player)).size;
+}
+
+// ─── PLAYER PROFILE + TIMELINE ────────────────────────────────────────────────
+function updateSidePanel(player) {
+  if (!player) {
+    document.getElementById('player-card').style.display = 'none';
+    document.getElementById('timeline-card').style.display = 'none';
+    return;
+  }
+  const reports = filtered.filter(r => r.player?.toLowerCase() === player.toLowerCase());
+  if (!reports.length) { document.getElementById('player-card').style.display = 'none'; return; }
+
+  const rep = reports[0];
+  document.getElementById('player-card').style.display = 'block';
+  document.getElementById('timeline-card').style.display = 'block';
+  document.getElementById('pp-name').textContent = rep.player;
+  document.getElementById('pp-meta').textContent = [rep.position, rep.team].filter(Boolean).join(' · ') || '—';
+  document.getElementById('pp-total').textContent = reports.length;
+  document.getElementById('pp-out').textContent   = reports.filter(r => r.status === 'Out').length;
+
+  const dayVals = reports.map(r => r.days_since_last_report).filter(d => d != null && d > 0);
+  document.getElementById('pp-avg').textContent = dayVals.length ? Math.round(dayVals.reduce((a,b)=>a+b,0)/dayVals.length) : '—';
+
+  const lastEl = document.getElementById('pp-last');
+  lastEl.textContent = rep.status || '—';
+  lastEl.style.color = statusColor(rep.status);
+
+  const sorted = [...reports].sort((a,b) => new Date(b.time_of_report) - new Date(a.time_of_report)).slice(0, 10);
+  document.getElementById('timeline-list').innerHTML = sorted.map((r, i) => `
+    <div class="tl-item">
+      <div class="tl-dot-wrap">
+        <div class="tl-dot" style="background:${statusColor(r.status)};border-color:${statusColor(r.status)}"></div>
+        ${i < sorted.length-1 ? '<div class="tl-line"></div>' : ''}
+      </div>
+      <div>
+        <div class="tl-status" style="color:${statusColor(r.status)}">${r.status}</div>
+        <div class="tl-time">${fmtTime(r.time_of_report)}</div>
+        <div class="tl-reporter">${r.reporter||'—'}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── REPORTERS + BREAKDOWN ────────────────────────────────────────────────────
+function buildTopReporters() {
+  const counts = {};
+  filtered.forEach(r => { if (r.reporter) counts[r.reporter] = (counts[r.reporter]||0)+1; });
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  document.getElementById('rp-period').textContent = `LAST ${document.getElementById('filter-days').value} DAYS`;
+  document.getElementById('top-reporters-list').innerHTML = top.length
+    ? top.map(([name, count]) => {
+        const initials = name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+        const outlet = filtered.find(r=>r.reporter===name)?.outlet || '';
+        return `<div class="rep-row">
+          <div class="rep-initials">${initials}</div>
+          <div><div class="rep-rname">${name}</div><div class="rep-routlet">${outlet.split('/')[0].trim()}</div></div>
+          <div class="rep-count">${count}</div>
+        </div>`;
+      }).join('')
+    : '<div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:10px 0">No data yet</div>';
+}
+
+function buildBreakdown() {
+  const counts = {};
+  filtered.forEach(r => { const k = r.body_part||'undisclosed'; counts[k]=(counts[k]||0)+1; });
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const max = top[0]?.[1]||1;
+  document.getElementById('injury-breakdown').innerHTML = top.length
+    ? top.map(([part,count]) => `
+        <div class="bd-row">
+          <div class="bd-label">${part}</div>
+          <div class="bd-bar-bg"><div class="bd-bar" style="width:${Math.round(count/max*100)}%"></div></div>
+          <div class="bd-num">${count}</div>
+        </div>`).join('')
+    : '<div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:10px 0">No data yet</div>';
+}
+
+// ─── AUTOCOMPLETE ─────────────────────────────────────────────────────────────
+let acIdx = -1;
+function onSearchInput(val) {
+  const q = val.toLowerCase().trim();
+  const box = document.getElementById('autocomplete');
+  if (!q || q.length < 2) { box.style.display = 'none'; return; }
+  const matches = [...new Set(allData.map(r=>r.player).filter(Boolean))]
+    .filter(p => p.toLowerCase().includes(q)).slice(0,8);
+  if (!matches.length) { box.style.display = 'none'; return; }
+  acIdx = -1;
+  box.innerHTML = matches.map(p => {
+    const team = allData.find(r=>r.player===p)?.team||'';
+    return `<div class="autocomplete-item" onclick="selectPlayer('${p.replace(/'/g,"\\'")}')">
+      ${p}<span class="autocomplete-team">${shortTeam(team)}</span></div>`;
+  }).join('');
+  box.style.display = 'block';
+}
+
+function onSearchKey(e) {
+  const items = document.querySelectorAll('.autocomplete-item');
+  if (e.key==='ArrowDown') { acIdx=Math.min(acIdx+1,items.length-1); hlAc(items); e.preventDefault(); }
+  else if (e.key==='ArrowUp') { acIdx=Math.max(acIdx-1,0); hlAc(items); e.preventDefault(); }
+  else if (e.key==='Enter') {
+    if (acIdx>=0 && items[acIdx]) items[acIdx].click();
+    else { document.getElementById('autocomplete').style.display='none'; runQuery(); }
+  }
+  else if (e.key==='Escape') { document.getElementById('autocomplete').style.display='none'; }
+}
+function hlAc(items) {
+  items.forEach((el,i)=>el.classList.toggle('selected',i===acIdx));
+  if(items[acIdx]) items[acIdx].scrollIntoView({block:'nearest'});
+}
+function selectPlayer(name) {
+  document.getElementById('player-search').value = name;
+  document.getElementById('autocomplete').style.display = 'none';
+  runQuery();
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-input-wrap'))
+    document.getElementById('autocomplete').style.display = 'none';
+});
+
+// ─── EXPORT ───────────────────────────────────────────────────────────────────
+function exportCSV() {
+  if (!filtered.length) return;
+  const cols = ['player','position','team','status','injury_type','body_part','matchup','game_date','game_time','reporter','outlet','tier','confidence','time_of_report','prev_status','days_since_last_report','tweet_text'];
+  const rows = filtered.map(r => cols.map(c => {
+    const v = String(r[c]??'').replace(/"/g,'""');
+    return v.includes(',')||v.includes('"')||v.includes('\n') ? `"${v}"` : v;
+  }).join(','));
+  const blob = new Blob([[cols.join(','), ...rows].join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `injurywire-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
+// ─── CLEAR ────────────────────────────────────────────────────────────────────
+function clearSearch() {
+  document.getElementById('player-search').value = '';
+  document.getElementById('filter-team').value = '';
+  document.getElementById('filter-status').value = '';
+  document.getElementById('filter-days').value = '30';
+  document.getElementById('autocomplete').style.display = 'none';
+  document.getElementById('player-card').style.display = 'none';
+  document.getElementById('timeline-card').style.display = 'none';
+  runQuery();
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function spClass(s) {
+  return {Out:'sp-out',Questionable:'sp-q',Doubtful:'sp-d','Game-Time Decision':'sp-gtd',Probable:'sp-prob'}[s]||'sp-q';
+}
+function statusColor(s) {
+  return {Out:'var(--red)',Questionable:'var(--orange)',Doubtful:'#ff8fa3','Game-Time Decision':'var(--yellow)',Probable:'var(--green)'}[s]||'var(--text2)';
+}
+function daysColor(d) {
+  if (d==null) return 'var(--muted)';
+  if (d===0) return 'var(--red)';
+  if (d<=3)  return 'var(--orange)';
+  if (d<=7)  return 'var(--yellow)';
+  return 'var(--green)';
+}
+function fmtTime(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  const diff = Math.floor((Date.now()-d)/60000);
+  if (diff<60) return `${diff}m ago`;
+  if (diff<1440) return `${Math.floor(diff/60)}h ago`;
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'});
+}
+function shortTeam(t) {
+  if (!t) return '—';
+  return t.replace('Los Angeles','LA').replace('Golden State','GS').replace('Minnesota','MIN')
+    .replace('Oklahoma City','OKC').replace('Portland Trail Blazers','Portland')
+    .replace('Washington','WSH').replace('New Orleans','NO').replace('San Antonio','SA')
+    .replace('Philadelphia','PHI').replace('Charlotte','CHA').replace('Milwaukee','MIL')
+    .replace('Cleveland','CLE').replace('Sacramento','SAC');
+}
+function setLoading() {
+  const skels = [1,2,3].map(()=>
+    `<tr><td><div class="skel" style="width:120px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:28px"></div></td><td><div class="skel" style="width:100px"></div></td><td><div class="skel" style="width:40px"></div></td></tr>`
+  ).join('');
+  document.getElementById('results-body').innerHTML = skels;
+  document.getElementById('empty-state').classList.remove('show');
+  document.getElementById('pagination').style.display = 'none';
+}
+function showEmpty(msg) {
+  document.getElementById('results-body').innerHTML = '';
+  const el = document.getElementById('empty-state');
+  el.classList.add('show');
+  document.getElementById('empty-sub').textContent = msg || 'No reports found.';
+}
+function setDbLive() {
+  document.getElementById('db-dot').className = 'db-dot live';
+  document.getElementById('db-status-text').textContent = 'DATABASE LIVE';
+  document.getElementById('db-status').className = 'db-status live';
+}
+function setDbError() {
+  document.getElementById('db-dot').style.background = 'var(--red)';
+  document.getElementById('db-status-text').textContent = 'API ERROR';
+}
+
+// Force fresh load if browser restores this page from back/forward cache
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) window.location.reload();
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+runQuery();
+</script>
+</body>
+</html>
