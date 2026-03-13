@@ -1241,6 +1241,85 @@ header {
 .header-nav-btn:hover { color: var(--text2); border-color: var(--border2); background: var(--surface2); }
 .header-nav-btn.active { color: var(--accent); border-color: rgba(0,200,255,0.3); background: var(--accent-dim); }
 
+/* ── STRUCTURED CARD ── */
+.summary-sentence {
+  font-family: var(--font-body); font-size: 13px; color: var(--text2);
+  line-height: 1.55; margin-bottom: 14px; font-style: italic;
+  border-left: 2px solid var(--border2); padding-left: 10px;
+}
+.summary-sentence strong { color: var(--text); font-style: normal; }
+
+.data-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  border-radius: 5px; overflow: hidden; margin-bottom: 12px;
+}
+.dg-cell {
+  background: var(--surface2); padding: 7px 10px;
+}
+.dg-cell.wide { grid-column: span 2; }
+.dg-cell.full { grid-column: span 3; }
+.dg-label {
+  font-family: var(--font-mono); font-size: 7px; letter-spacing: 2px;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 3px;
+}
+.dg-value {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dg-value.unknown { color: var(--muted); font-style: italic; }
+.dg-value.v-red    { color: var(--red); }
+.dg-value.v-orange { color: var(--orange); }
+.dg-value.v-yellow { color: var(--yellow); }
+.dg-value.v-green  { color: var(--green); }
+.dg-value.v-pink   { color: #ff8fa3; }
+
+/* Sources block — replaces old tweet-box */
+.sources-block { margin-bottom: 6px; }
+
+.primary-source {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 10px 12px; margin-bottom: 6px;
+}
+.ps-avatar {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--surface3), var(--border2));
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; color: var(--accent);
+}
+.ps-info { flex: 1; min-width: 0; }
+.ps-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.ps-meta { font-family: var(--font-mono); font-size: 9px; color: var(--muted); }
+.ps-x-link {
+  margin-left: auto; color: var(--text2); text-decoration: none;
+  font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 3px;
+  border: 1px solid var(--border2); flex-shrink: 0;
+  transition: color 0.12s, border-color 0.12s;
+}
+.ps-x-link:hover { color: var(--accent); border-color: rgba(0,200,255,0.3); }
+
+.corr-sources {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 0 2px;
+}
+.corr-label-sm {
+  font-family: var(--font-mono); font-size: 8px; color: var(--muted);
+  letter-spacing: 1px; white-space: nowrap;
+}
+.corr-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 9px; color: var(--text2);
+  background: var(--surface3); border: 1px solid var(--border2);
+  padding: 2px 7px; border-radius: 2px;
+}
+.corr-chip a {
+  color: var(--muted); text-decoration: none; font-weight: 700;
+  font-size: 9px; transition: color 0.12s;
+}
+.corr-chip a:hover { color: var(--accent); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
   .layout { grid-template-columns: 200px 1fr 240px; }
@@ -1872,10 +1951,30 @@ async function loadData(silent = false) {
 }
 
 function loadMockData() {
+  const demoExtras = {
+    "Jayson Tatum":           { position:'SF', matchup:'BOS @ MIA', game_date:'Tonight', game_time:'7:30 PM ET', prev_status:'Probable', days_since_last_report:3 },
+    "Giannis Antetokounmpo":  { position:'PF', matchup:'MIL @ CHI', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Questionable', days_since_last_report:1 },
+    "Karl-Anthony Towns":     { position:'C',  matchup:'NYK @ BKN', game_date:'Tonight', game_time:'7:30 PM ET', prev_status:'Questionable', days_since_last_report:5 },
+    "Bam Adebayo":            { position:'C',  matchup:'MIA @ BOS', game_date:'Tonight', game_time:'7:30 PM ET', prev_status:'Questionable', days_since_last_report:2 },
+    "Joel Embiid":            { position:'C',  matchup:'PHI @ NYK', game_date:'Tonight', game_time:'7:00 PM ET', prev_status:'Out',          days_since_last_report:0 },
+    "Luka Doncic":            { position:'PG', matchup:'DAL @ LAL', game_date:'Tonight', game_time:'10:00 PM ET', prev_status:'Probable',   days_since_last_report:7 },
+    "Victor Wembanyama":      { position:'C',  matchup:'SA @ DEN',  game_date:'Tonight', game_time:'9:00 PM ET', prev_status:'Probable',     days_since_last_report:4 },
+    "Nikola Jokic":           { position:'C',  matchup:'DEN @ SA',  game_date:'Tonight', game_time:'9:00 PM ET', prev_status:'Probable',     days_since_last_report:12 },
+    "Tyrese Haliburton":      { position:'PG', matchup:'IND @ MIL', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Probable',     days_since_last_report:6 },
+    "Stephen Curry":          { position:'PG', matchup:'GS @ LAC',  game_date:'Tonight', game_time:'10:30 PM ET', prev_status:'Probable',   days_since_last_report:9 },
+    "Damian Lillard":         { position:'PG', matchup:'MIL @ CHI', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Probable',     days_since_last_report:14 },
+    "LeBron James":           { position:'SF', matchup:'LAL @ OKC', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Available',    days_since_last_report:3 },
+    "Donovan Mitchell":       { position:'SG', matchup:'CLE @ ORL', game_date:'Tonight', game_time:'7:00 PM ET', prev_status:'Probable',     days_since_last_report:2 },
+    "Shai Gilgeous-Alexander":{ position:'SG', matchup:'OKC @ LAL', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Available',    days_since_last_report:21 },
+    "Pascal Siakam":          { position:'PF', matchup:'IND @ MIL', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Available',    days_since_last_report:8 },
+    "Anthony Davis":          { position:'PF', matchup:'LAL @ OKC', game_date:'Tonight', game_time:'8:00 PM ET', prev_status:'Probable',     days_since_last_report:1 },
+  };
   allReports = DEMO_REPORTS.map((r, i) => ({
     ...r, id: i,
     timestamp: new Date(Date.now() - r.minsAgo * 60000),
-    leadTime: Math.floor(Math.random() * 160 + 20)
+    leadTime: Math.floor(Math.random() * 160 + 20),
+    ...(demoExtras[r.player] || { position:'—', matchup:'—', game_date:'—', game_time:'—', prev_status:null, days_since_last_report:null }),
+    tweetId: null,
   }));
   setApiStatus('demo', 'DEMO');
   setTimeout(() => {
@@ -1886,8 +1985,8 @@ function loadMockData() {
     applyFilters();
   }, 1200);
   // Inject live demo pushes to demonstrate real-time updates
-  setTimeout(() => pushNewReport({player:"Anthony Edwards",team:"Minnesota Timberwolves",injury:"Knee soreness",body:"knee",status:"Questionable",confidence:0.83,reporter:"Jon Krawczynski",handle:"@JonKrawczynski",outlet:"The Athletic",tier:1,tweet:"Ant is questionable tonight. Knee soreness. He was limited at shootaround — going through his usual pregame treatment. I'd call this about 50-50 right now.",corroborators:[]}), 9000);
-  setTimeout(() => pushNewReport({player:"Zion Williamson",team:"New Orleans Pelicans",injury:"Hamstring",body:"hamstring",status:"Out",confidence:0.98,reporter:"Will Guillory",handle:"@WillGuillory",outlet:"The Athletic",tier:1,tweet:"Zion Williamson is out tonight. Hamstring. He did not travel with the team and was ruled out this morning. No timeline for return provided by the Pelicans.",corroborators:["Jim Eichenhofer"]}), 24000);
+  setTimeout(() => pushNewReport({player:"Anthony Edwards",team:"Minnesota Timberwolves",injury:"Knee soreness",body:"knee",status:"Questionable",confidence:0.83,reporter:"Jon Krawczynski",handle:"@JonKrawczynski",outlet:"The Athletic",tier:1,tweet:"Ant is questionable tonight. Knee soreness.",position:"SG",matchup:"MIN @ PHO",game_date:"Tonight",game_time:"9:00 PM ET",prev_status:"Available",days_since_last_report:5,corroborators:[]}), 9000);
+  setTimeout(() => pushNewReport({player:"Zion Williamson",team:"New Orleans Pelicans",injury:"Hamstring",body:"hamstring",status:"Out",confidence:0.98,reporter:"Will Guillory",handle:"@WillGuillory",outlet:"The Athletic",tier:1,tweet:"Zion Williamson is out tonight. Hamstring.",position:"PF",matchup:"NO @ MEM",game_date:"Tonight",game_time:"8:00 PM ET",prev_status:"Questionable",days_since_last_report:0,corroborators:["Jim Eichenhofer"]}), 24000);
 }
 
 async function loadFromAPI(silent = false) {
@@ -1937,8 +2036,9 @@ function mapApiReport(r, i) {
     id: i,
     source_id: r.id || null,
     player: r.player_name || r.player || 'Unknown',
+    position: r.position || null,
     team: r.team || 'Unknown',
-    injury: r.injury_description || r.injury || 'Injury',
+    injury: r.injury_description || r.injury_type || r.injury || 'Injury',
     body: r.body_part || r.body || '',
     status: r.game_status || r.status || 'Questionable',
     confidence: (r.confidence_score || r.confidence || 75) / 100,
@@ -1947,9 +2047,15 @@ function mapApiReport(r, i) {
     outlet: r.outlet || '',
     tier: r.reporter_tier || r.tier || 2,
     tweet: r.tweet_text || r.tweet || '',
-    timestamp: new Date(r.event_time || r.timestamp || Date.now()),
+    timestamp: new Date(r.event_time || r.time_of_report || r.timestamp || Date.now()),
     leadTime: r.lead_time_minutes || Math.floor(Math.random() * 120 + 15),
     corroborators: r.corroborators || [],
+    matchup: r.matchup || null,
+    game_date: r.game_date || null,
+    game_time: r.game_time || null,
+    prev_status: r.prev_status || null,
+    days_since_last_report: r.days_since_last_report ?? null,
+    tweetId: r.tweet_id || r.id || null,
   };
 }
 
@@ -2177,62 +2283,9 @@ function viewReporter(el) {
   feed.innerHTML = profileHeader +
     repReports.map((report, idx) => {
       const isPrimary = report.reporter === r.name || report.handle === r.handle;
-      const bd = getConfBreakdown(report);
-      const confScore = Math.min(99, bd.tier + bd.outlet + bd.status + bd.lang + bd.signal + bd.corr);
-      const [cScoreClass, cBarClass] = confClass(confScore / 100);
-      const rawHandle = (report.handle || '').replace('@', '');
-      const tweetId = report.tweetId || report.source_id || '';
-      const tweetXUrl = (rawHandle && tweetId) ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
       return `<div class="injury-card" style="animation-delay:${idx * 40}ms">
-        <div>
-          <div class="card-header">
-            <span class="status-pill ${statusPillClass(report.status)}">${report.status}</span>
-            <span class="card-team-tag">${report.team.toUpperCase()}</span>
-            ${!isPrimary ? `<span style="font-family:var(--font-mono);font-size:8px;color:var(--muted);border:1px solid var(--border2);padding:1px 6px;border-radius:2px">CORROBORATED</span>` : ''}
-          </div>
-          <div class="player-name">${report.player.toUpperCase()}</div>
-          <div class="injury-meta">
-            <strong>${report.injury}</strong>
-            <span class="dot">·</span>
-            <span>${report.body}</span>
-            <span class="dot">·</span>
-            <span>${report.team}</span>
-          </div>
-          <div class="tweet-box">
-            <div class="tweet-top">
-              <div class="avatar">${report.handle.slice(1,3).toUpperCase()}</div>
-              <div>
-                <div class="reporter-name">${report.reporter}</div>
-                <div class="reporter-handle">${report.handle} · ${report.outlet}</div>
-              </div>
-              <span class="tier-pill tier-${report.tier}">TIER ${report.tier}</span>
-              ${tweetXUrl ? `<a class="tweet-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View tweet on X">𝕏</a>` : ''}
-            </div>
-            <div class="tweet-text">"${report.tweet}"</div>
-          </div>
-          ${report.corroborators && report.corroborators.length ? `
-          <div class="corroboration">
-            <span class="corr-label">ALSO CONFIRMED ·</span>
-            ${report.corroborators.map(c => `<span class="corr-source">${c}</span>`).join('')}
-          </div>` : ''}
-          <div class="card-footer">
-            <span class="card-time">${timeAgo(report.timestamp)}</span>
-            <span class="outlet-tag">${report.outlet.split('/')[0].trim()}</span>
-          </div>
-        </div>
-        <div class="conf-wrap">
-          <div class="conf-label-row"><span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score 0–100 across 6 factors.</span></span></div>
-          <div class="conf-score ${cScoreClass}">${confScore}</div>
-          <div class="conf-bar-bg"><div class="conf-bar ${cBarClass}" style="width:${confScore}%"></div></div>
-          <div class="conf-breakdown">
-            Reporter tier &nbsp;<span>+${bd.tier}</span><br>
-            Outlet cred &nbsp;<span>+${bd.outlet}</span><br>
-            Status &nbsp;<span>+${bd.status}</span><br>
-            Tweet precision &nbsp;<span>+${bd.lang}</span><br>
-            Injury signal &nbsp;<span>+${bd.signal}</span>
-            ${(report.corroborators || []).length ? `<br>Corroboration &nbsp;<span>+${bd.corr}</span>` : ''}
-          </div>
-        </div>
+        ${buildCardContent(report, false, 0)}
+        ${!isPrimary ? `<div style="position:absolute;top:12px;right:100px;font-family:var(--font-mono);font-size:8px;color:var(--muted);border:1px solid var(--border2);padding:1px 6px;border-radius:2px">CORROBORATED</div>` : ''}
       </div>`;
     }).join('');
 }
@@ -2242,6 +2295,145 @@ function clearReporterView() {
   document.querySelectorAll('.reporter-row').forEach(row => row.classList.remove('active-rep'));
   renderFeed();
   document.getElementById('feed-title').textContent = currentTeam === 'all' ? 'INJURY FEED' : currentTeam.toUpperCase();
+}
+
+// ─── STRUCTURED CARD HELPERS ─────────────────────────────────────────────────
+
+function buildSummaryLine(r) {
+  const player   = r.player || '—';
+  const pos      = r.position || '—';
+  const team     = shortTeamName(r.team);
+  const status   = r.status || '—';
+  const injury   = r.injury && r.injury !== 'Injury' ? r.injury : 'an undisclosed injury';
+  const article  = /^[aeiou]/i.test(injury) ? 'an' : 'a';
+  const matchup  = r.matchup || '—';
+  const day      = r.game_date || '—';
+  const time     = r.game_time || '—';
+  const reporter = r.reporter || '—';
+
+  // Corroborator suffix
+  const corrobNames = (r.corroborators || []).map(c => typeof c === 'object' ? c.name : c);
+  const corrSuffix = corrobNames.length
+    ? ` — also confirmed by ${corrobNames.join(', ')}`
+    : '';
+
+  const gameStr = (matchup !== '—' || day !== '—' || time !== '—')
+    ? `for <strong>${matchup}</strong> on <strong>${day}</strong> at <strong>${time}</strong>`
+    : 'for <strong>—</strong>';
+
+  return `<strong>${player}</strong> (${pos}, ${team}) is <strong>${status.toUpperCase()}</strong> `
+       + `${gameStr} with ${article} <strong>${injury}</strong>, `
+       + `per <strong>${reporter}</strong>${corrSuffix}.`;
+}
+
+function shortTeamName(full) {
+  if (!full) return '—';
+  const city = {
+    'Atlanta Hawks':'Hawks','Boston Celtics':'Celtics','Brooklyn Nets':'Nets',
+    'Charlotte Hornets':'Hornets','Chicago Bulls':'Bulls','Cleveland Cavaliers':'Cavs',
+    'Dallas Mavericks':'Mavs','Denver Nuggets':'Nuggets','Detroit Pistons':'Pistons',
+    'Golden State Warriors':'Warriors','Houston Rockets':'Rockets','Indiana Pacers':'Pacers',
+    'LA Clippers':'Clippers','Los Angeles Lakers':'Lakers','Memphis Grizzlies':'Grizzlies',
+    'Miami Heat':'Heat','Milwaukee Bucks':'Bucks','Minnesota Timberwolves':'Wolves',
+    'New Orleans Pelicans':'Pelicans','New York Knicks':'Knicks',
+    'Oklahoma City Thunder':'Thunder','Orlando Magic':'Magic',
+    'Philadelphia 76ers':'Sixers','Phoenix Suns':'Suns',
+    'Portland Trail Blazers':'Blazers','Sacramento Kings':'Kings',
+    'San Antonio Spurs':'Spurs','Toronto Raptors':'Raptors',
+    'Utah Jazz':'Jazz','Washington Wizards':'Wizards',
+  };
+  return city[full] || full.split(' ').pop();
+}
+
+function dgVal(v, colorClass) {
+  const empty = !v || v === '—' || v === 'Unknown' || v === 'unknown' || v === 'undisclosed';
+  const cls = empty ? 'dg-value unknown' : `dg-value${colorClass ? ' ' + colorClass : ''}`;
+  return `<div class="${cls}">${empty ? '—' : v}</div>`;
+}
+
+function statusColorClass(s) {
+  return {Out:'v-red', Questionable:'v-orange', Doubtful:'v-pink', 'Game-Time Decision':'v-yellow', Probable:'v-green', Available:'v-green'}[s] || '';
+}
+
+function buildCardContent(r, isNew, expiryMs) {
+  // ── NEW badge countdown
+  const secsLeft = isNew ? Math.max(0, Math.ceil(((expiryMs||0) - Date.now()) / 1000)) : 0;
+  const countdownStr = `${Math.floor(secsLeft / 60)}:${String(secsLeft % 60).padStart(2, '0')}`;
+
+  // ── Tweet X link (primary reporter)
+  const rawHandle = (r.handle || '').replace('@', '');
+  const tweetId   = r.tweetId || r.source_id || '';
+  const tweetXUrl = (rawHandle && tweetId) ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
+
+  // ── Corroborators with X profile links
+  const corrobArr = (r.corroborators || []);
+  const corrHtml = corrobArr.length ? `
+    <div class="corr-sources">
+      <span class="corr-label-sm">ALSO CONFIRMED BY ·</span>
+      ${corrobArr.map(c => {
+        const name   = typeof c === 'object' ? c.name : c;
+        const hRaw   = typeof c === 'object' ? c.handle : (REPORTERS.find(rep => rep.name === c)?.handle || '');
+        const hClean = hRaw.replace('@', '');
+        return `<span class="corr-chip">${name}${hClean ? ` <a href="https://x.com/${hClean}" target="_blank" rel="noopener">𝕏</a>` : ''}</span>`;
+      }).join('')}
+    </div>` : '';
+
+  // ── Confidence
+  const bd = getConfBreakdown(r);
+  const confScore = Math.min(99, bd.tier + bd.outlet + bd.status + bd.lang + bd.signal + bd.corr);
+  const [cScoreClass, cBarClass] = confClass(confScore / 100);
+
+  // ── Prev status display
+  const prevDisplay = r.prev_status || '—';
+  const daysDisplay = r.days_since_last_report !== null && r.days_since_last_report !== undefined
+    ? `${r.days_since_last_report}d` : '—';
+
+  return `
+    <div>
+      <div class="card-header">
+        <span class="status-pill ${statusPillClass(r.status)}">${r.status}</span>
+        <span class="card-team-tag">${(r.team || '').toUpperCase()}</span>
+        ${isNew ? `<span class="new-badge" data-expiry="${expiryMs}">● NEW <span class="new-countdown">${countdownStr}</span></span>` : ''}
+      </div>
+
+      <div class="player-name">${(r.player || '—').toUpperCase()}</div>
+
+      <div class="summary-sentence">${buildSummaryLine(r)}</div>
+
+      <div class="sources-block">
+        <div class="primary-source">
+          <div class="ps-avatar">${(r.handle || '@@').slice(1,3).toUpperCase()}</div>
+          <div class="ps-info">
+            <div class="ps-name">${r.reporter || '—'}</div>
+            <div class="ps-meta">${r.handle || ''} · ${r.outlet || ''} · <span style="color:var(--accent)">TIER ${r.tier || '—'}</span></div>
+          </div>
+          ${tweetXUrl
+            ? `<a class="ps-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View original tweet">𝕏 SOURCE</a>`
+            : `<span class="ps-x-link" style="opacity:0.3;cursor:default">𝕏 SOURCE</span>`}
+        </div>
+        ${corrHtml}
+      </div>
+
+      <div class="card-footer">
+        <span class="card-time">${timeAgo(r.timestamp)}</span>
+        <span class="outlet-tag">${(r.outlet || '').split('/')[0].trim()}</span>
+      </div>
+    </div>
+    <div class="conf-wrap">
+      <div class="conf-label-row">
+        <span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score 0–100 across 6 factors: reporter tier, outlet credibility, status specificity, tweet precision, injury signal, and corroboration.</span></span>
+      </div>
+      <div class="conf-score ${cScoreClass}">${confScore}</div>
+      <div class="conf-bar-bg"><div class="conf-bar ${cBarClass}" style="width:${confScore}%"></div></div>
+      <div class="conf-breakdown">
+        Reporter tier &nbsp;<span>+${bd.tier}</span><br>
+        Outlet cred &nbsp;<span>+${bd.outlet}</span><br>
+        Status &nbsp;<span>+${bd.status}</span><br>
+        Tweet precision &nbsp;<span>+${bd.lang}</span><br>
+        Injury signal &nbsp;<span>+${bd.signal}</span>
+        ${corrobArr.length ? `<br>Corroboration &nbsp;<span>+${bd.corr}</span>` : ''}
+      </div>
+    </div>`;
 }
 
 // ─── RENDER FEED ──────────────────────────────────────────────────────────────
@@ -2287,7 +2479,7 @@ function timeAgo(ts) {
 }
 
 function renderFeed() {
-  const feed = document.getElementById('feed');
+  const feed  = document.getElementById('feed');
   const empty = document.getElementById('empty-state');
   document.getElementById('feed-count').textContent = `${filtered.length} report${filtered.length !== 1 ? 's' : ''} · ${allReports.length} total`;
 
@@ -2299,77 +2491,10 @@ function renderFeed() {
   empty.classList.remove('show');
 
   feed.innerHTML = filtered.map((r, idx) => {
-    const bd = getConfBreakdown(r);
-    const confScore = Math.min(99, bd.tier + bd.outlet + bd.status + bd.lang + bd.signal + bd.corr);
-    const [cScoreClass, cBarClass] = confClass(confScore / 100);
-    const isNew = newIds.has(r.id);
+    const isNew    = newIds.has(r.id);
     const expiryMs = newExpiry[r.id] || 0;
-    const secsLeft = isNew ? Math.max(0, Math.ceil((expiryMs - Date.now()) / 1000)) : 0;
-    const countdownStr = `${Math.floor(secsLeft / 60)}:${String(secsLeft % 60).padStart(2, '0')}`;
-
-    // Tweet X link — only when we have both handle and a real tweet ID
-    const rawHandle = (r.handle || '').replace('@', '');
-    const tweetId = r.tweetId || r.source_id || '';
-    const tweetXUrl = (rawHandle && tweetId && !/^\d+$/.test(String(tweetId)) === false)
-      ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
-
-    const corrobHtml = r.corroborators && r.corroborators.length
-      ? `<div class="corroboration">
-          <span class="corr-label">ALSO CONFIRMED BY ·</span>
-          ${r.corroborators.map(c => `<span class="corr-source">${c}</span>`).join('')}
-        </div>`
-      : '';
-
     return `<div class="injury-card ${isNew ? 'is-new' : ''}" style="animation-delay:${idx * 35}ms">
-      <div>
-        <div class="card-header">
-          <span class="status-pill ${statusPillClass(r.status)}">${r.status}</span>
-          <span class="card-team-tag">${r.team.toUpperCase()}</span>
-          ${isNew ? `<span class="new-badge" data-expiry="${expiryMs}">● NEW <span class="new-countdown">${countdownStr}</span></span>` : ''}
-        </div>
-        <div class="player-name">${r.player.toUpperCase()}</div>
-        <div class="injury-meta">
-          <strong>${r.injury}</strong>
-          <span class="dot">·</span>
-          <span>${r.body}</span>
-          <span class="dot">·</span>
-          <span>${r.team}</span>
-        </div>
-        <div class="tweet-box">
-          <div class="tweet-top">
-            <div class="avatar">${r.handle.slice(1,3).toUpperCase()}</div>
-            <div>
-              <div class="reporter-name">${r.reporter}</div>
-              <div class="reporter-handle">${r.handle} · ${r.outlet}</div>
-            </div>
-            <span class="tier-pill tier-${r.tier}">TIER ${r.tier}</span>
-            ${tweetXUrl ? `<a class="tweet-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View tweet on X">𝕏</a>` : ''}
-          </div>
-          <div class="tweet-text">"${r.tweet}"</div>
-        </div>
-        ${corrobHtml}
-        <div class="card-footer">
-          <span class="card-time">${timeAgo(r.timestamp)}</span>
-          <span class="outlet-tag">${r.outlet.split('/')[0].trim()}</span>
-        </div>
-      </div>
-      <div class="conf-wrap">
-        <div class="conf-label-row">
-          <span class="conf-info">CONFIDENCE<span class="conf-tooltip">Score 0–100 across 6 factors: reporter tier, outlet credibility, status specificity, tweet precision, injury signal, and corroboration.</span></span>
-        </div>
-        <div class="conf-score ${cScoreClass}">${confScore}</div>
-        <div class="conf-bar-bg">
-          <div class="conf-bar ${cBarClass}" style="width:${confScore}%"></div>
-        </div>
-        <div class="conf-breakdown">
-          Reporter tier &nbsp;<span>+${bd.tier}</span><br>
-          Outlet cred &nbsp;<span>+${bd.outlet}</span><br>
-          Status &nbsp;<span>+${bd.status}</span><br>
-          Tweet precision &nbsp;<span>+${bd.lang}</span><br>
-          Injury signal &nbsp;<span>+${bd.signal}</span>
-          ${(r.corroborators || []).length ? `<br>Corroboration &nbsp;<span>+${bd.corr}</span>` : ''}
-        </div>
-      </div>
+      ${buildCardContent(r, isNew, expiryMs)}
     </div>`;
   }).join('');
 }
