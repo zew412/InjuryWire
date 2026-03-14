@@ -1669,235 +1669,291 @@ function extractInjuryLabel(text) {
 
 // ─── NBA PLAYER ROSTER (2024-25 season) ───────────────────────────────────────
 // Maps canonical name → { team, position }
-// ── NOTE: This static fallback is used if the live /proxy/roster fetch fails.
-// Positions use balldontlie-style G/F/C (not PG/SG/SF/PF) for consistency.
-// Updated through 2025-26 season (Feb 2025 deadline + 2025 offseason trades).
-// The live roster from the server always takes precedence over this.
 const NBA_PLAYER_LOOKUP = {
   // Atlanta Hawks
-  'Trae Young':{'team':'Washington Wizards','position':'G'},
-  'Jalen Johnson':{'team':'Atlanta Hawks','position':'F'},
-  'Clint Capela':{'team':'Houston Rockets','position':'C'},      // FA → Houston
-  'De\'Andre Hunter':{'team':'Sacramento Kings','position':'F'},    // traded to SAC
-  'Saddiq Bey':{'team':'Atlanta Hawks','position':'F'},
+  'Trae Young':{'team':'Washington Wizards','position':'PG'},
+  'Dejounte Murray':{'team':'New Orleans Pelicans','position':'PG'},
+  'Jalen Johnson':{'team':'Atlanta Hawks','position':'SF'},
+  'Clint Capela':{'team':'Atlanta Hawks','position':'C'},
+  'De\'Andre Hunter':{'team':'Atlanta Hawks','position':'SF'},
+  'Bogdan Bogdanovic':{'team':'Atlanta Hawks','position':'SG'},
+  'Saddiq Bey':{'team':'Atlanta Hawks','position':'SF'},
   // Boston Celtics
-  'Jayson Tatum':{'team':'Boston Celtics','position':'F'},
-  'Jaylen Brown':{'team':'Boston Celtics','position':'G'},
-  'Kristaps Porzingis':{'team':'Golden State Warriors','position':'C'},
-  'Payton Pritchard':{'team':'Boston Celtics','position':'G'},
-  'Sam Hauser':{'team':'Boston Celtics','position':'F'},
-  'Luke Kornet':{'team':'San Antonio Spurs','position':'C'},     // FA → SA
-  'Al Horford':{'team':'Golden State Warriors','position':'C'},  // FA → GSW
-  'Jrue Holiday':{'team':'Portland Trail Blazers','position':'G'}, // traded to POR
+  'Jayson Tatum':{'team':'Boston Celtics','position':'SF'},
+  'Jaylen Brown':{'team':'Boston Celtics','position':'SG'},
+  'Kristaps Porzingis':{'team':'Boston Celtics','position':'C'},
+  'Jrue Holiday':{'team':'Boston Celtics','position':'PG'},
+  'Al Horford':{'team':'Boston Celtics','position':'C'},
+  'Payton Pritchard':{'team':'Boston Celtics','position':'PG'},
+  'Sam Hauser':{'team':'Boston Celtics','position':'SF'},
+  'Luke Kornet':{'team':'Boston Celtics','position':'C'},
   // Brooklyn Nets
-  'Cam Thomas':{'team':'Brooklyn Nets','position':'G'},
+  'Cam Thomas':{'team':'Brooklyn Nets','position':'SG'},
   'Nic Claxton':{'team':'Brooklyn Nets','position':'C'},
-  'Ben Simmons':{'team':'Brooklyn Nets','position':'G'},
-  'Noah Clowney':{'team':'Brooklyn Nets','position':'F'},
-  'Anfernee Simons':{'team':'Chicago Bulls','position':'G'},     // traded from POR
+  'Ben Simmons':{'team':'Brooklyn Nets','position':'PG'},
+  'Dennis Schroder':{'team':'Brooklyn Nets','position':'PG'},
+  'Dorian Finney-Smith':{'team':'Brooklyn Nets','position':'SF'},
+  'Noah Clowney':{'team':'Brooklyn Nets','position':'PF'},
   // Charlotte Hornets
-  'LaMelo Ball':{'team':'Charlotte Hornets','position':'G'},
-  'Brandon Miller':{'team':'Charlotte Hornets','position':'F'},
-  'Miles Bridges':{'team':'Charlotte Hornets','position':'F'},
-  'Grant Williams':{'team':'Charlotte Hornets','position':'F'},
+  'LaMelo Ball':{'team':'Charlotte Hornets','position':'PG'},
+  'Brandon Miller':{'team':'Charlotte Hornets','position':'SF'},
+  'Mark Williams':{'team':'Charlotte Hornets','position':'C'},
+  'Miles Bridges':{'team':'Charlotte Hornets','position':'SF'},
+  'Grant Williams':{'team':'Charlotte Hornets','position':'PF'},
+  'Tre Mann':{'team':'Charlotte Hornets','position':'SG'},
   // Chicago Bulls
-  'Nikola Vucevic':{'team':'Boston Celtics','position':'C'},
-  'DeMar DeRozan':{'team':'Chicago Bulls','position':'F'},
-  'Coby White':{'team':'Chicago Bulls','position':'G'},
-  'Ayo Dosunmu':{'team':'Chicago Bulls','position':'G'},
-  'Patrick Williams':{'team':'Chicago Bulls','position':'F'},
-  'Josh Giddey':{'team':'Chicago Bulls','position':'G'},
-  'Matas Buzelis':{'team':'Chicago Bulls','position':'F'},
-  'Zach LaVine':{'team':'Sacramento Kings','position':'G'},      // traded to SAC
+  'Zach LaVine':{'team':'Chicago Bulls','position':'SG'},
+  'Nikola Vucevic':{'team':'Chicago Bulls','position':'C'},
+  'DeMar DeRozan':{'team':'Sacramento Kings','position':'SG'},
+  'Coby White':{'team':'Chicago Bulls','position':'PG'},
+  'Ayo Dosunmu':{'team':'Chicago Bulls','position':'SG'},
+  'Patrick Williams':{'team':'Chicago Bulls','position':'PF'},
+  'Josh Giddey':{'team':'Chicago Bulls','position':'PG'},
+  'Matas Buzelis':{'team':'Chicago Bulls','position':'PF'},
   // Cleveland Cavaliers
-  'Donovan Mitchell':{'team':'Cleveland Cavaliers','position':'G'},
-  'Darius Garland':{'team':'LA Clippers','position':'G'},
+  'Donovan Mitchell':{'team':'Cleveland Cavaliers','position':'SG'},
+  'Darius Garland':{'team':'Cleveland Cavaliers','position':'PG'},
   'Jarrett Allen':{'team':'Cleveland Cavaliers','position':'C'},
-  'Evan Mobley':{'team':'Cleveland Cavaliers','position':'F'},
+  'Evan Mobley':{'team':'Cleveland Cavaliers','position':'PF'},
+  'Max Strus':{'team':'Cleveland Cavaliers','position':'SG'},
+  'Dean Wade':{'team':'Cleveland Cavaliers','position':'PF'},
   // Dallas Mavericks
-  'Kyrie Irving':{'team':'Dallas Mavericks','position':'G'},
-  'PJ Washington':{'team':'Dallas Mavericks','position':'F'},
-  'Klay Thompson':{'team':'Dallas Mavericks','position':'G'},
-  'Spencer Dinwiddie':{'team':'Dallas Mavericks','position':'G'},
-  'Luka Doncic':{'team':'Los Angeles Lakers','position':'G'},    // traded to LAL Feb 2025
+  'Luka Doncic':{'team':'Los Angeles Lakers','position':'PG'},
+  'Kyrie Irving':{'team':'Dallas Mavericks','position':'PG'},
+  'PJ Washington':{'team':'Dallas Mavericks','position':'PF'},
+  'Derrick Jones Jr':{'team':'Dallas Mavericks','position':'SF'},
+  'Naji Marshall':{'team':'Dallas Mavericks','position':'SF'},
+  'Klay Thompson':{'team':'Dallas Mavericks','position':'SG'},
+  'Spencer Dinwiddie':{'team':'Dallas Mavericks','position':'PG'},
   // Denver Nuggets
   'Nikola Jokic':{'team':'Denver Nuggets','position':'C'},
-  'Jamal Murray':{'team':'Denver Nuggets','position':'G'},
-  'Michael Porter Jr':{'team':'Denver Nuggets','position':'F'},
-  'Aaron Gordon':{'team':'Denver Nuggets','position':'F'},
-  'Kentavious Caldwell-Pope':{'team':'Denver Nuggets','position':'G'},
-  'Peyton Watson':{'team':'Denver Nuggets','position':'F'},
+  'Jamal Murray':{'team':'Denver Nuggets','position':'PG'},
+  'Michael Porter Jr':{'team':'Denver Nuggets','position':'SF'},
+  'Aaron Gordon':{'team':'Denver Nuggets','position':'PF'},
+  'Kentavious Caldwell-Pope':{'team':'Denver Nuggets','position':'SG'},
+  'Reggie Jackson':{'team':'Denver Nuggets','position':'PG'},
+  'Peyton Watson':{'team':'Denver Nuggets','position':'SF'},
+  'Zeke Nnaji':{'team':'Denver Nuggets','position':'PF'},
   // Detroit Pistons
-  'Cade Cunningham':{'team':'Detroit Pistons','position':'G'},
+  'Cade Cunningham':{'team':'Detroit Pistons','position':'PG'},
   'Jalen Duren':{'team':'Detroit Pistons','position':'C'},
-  'Ausar Thompson':{'team':'Detroit Pistons','position':'F'},
-  'Tobias Harris':{'team':'Detroit Pistons','position':'F'},
-  'Caris LeVert':{'team':'Detroit Pistons','position':'G'},
-  'Isaiah Stewart':{'team':'Detroit Pistons','position':'F'},
-  'Ron Holland':{'team':'Detroit Pistons','position':'F'},
+  'Ausar Thompson':{'team':'Detroit Pistons','position':'SF'},
+  'Tobias Harris':{'team':'Detroit Pistons','position':'PF'},
+  'Caris LeVert':{'team':'Detroit Pistons','position':'SG'},
+  'Isaiah Stewart':{'team':'Detroit Pistons','position':'PF'},
+  'Ron Holland':{'team':'Detroit Pistons','position':'SF'},
+  'Monte Morris':{'team':'Detroit Pistons','position':'PG'},
+  'Simone Fontecchio':{'team':'Detroit Pistons','position':'SF'},
+  'Bojan Bogdanovic':{'team':'Detroit Pistons','position':'SF'},
+  'Marcus Sasser':{'team':'Detroit Pistons','position':'SG'},
+  'Killian Hayes':{'team':'Detroit Pistons','position':'PG'},
   // Golden State Warriors
-  'Stephen Curry':{'team':'Golden State Warriors','position':'G'},
-  'Jimmy Butler':{'team':'Golden State Warriors','position':'F'}, // traded from MIA Feb 2025
-  'Draymond Green':{'team':'Golden State Warriors','position':'F'},
-  'Jonathan Kuminga':{'team':'Atlanta Hawks','position':'F'},
-  'Andrew Wiggins':{'team':'Miami Heat','position':'F'},
-  'Brandin Podziemski':{'team':'Golden State Warriors','position':'G'},
+  'Stephen Curry':{'team':'Golden State Warriors','position':'PG'},
+  'Draymond Green':{'team':'Golden State Warriors','position':'PF'},
+  'Jonathan Kuminga':{'team':'Golden State Warriors','position':'PF'},
+  'Andrew Wiggins':{'team':'Golden State Warriors','position':'SF'},
+  'Brandin Podziemski':{'team':'Golden State Warriors','position':'SG'},
   'Trayce Jackson-Davis':{'team':'Golden State Warriors','position':'C'},
-  'Moses Moody':{'team':'Golden State Warriors','position':'G'},
-  'Buddy Hield':{'team':'Atlanta Hawks','position':'G'},
+  'Moses Moody':{'team':'Golden State Warriors','position':'SG'},
+  'Buddy Hield':{'team':'Golden State Warriors','position':'SG'},
+  'De\'Anthony Melton':{'team':'Golden State Warriors','position':'SG'},
   // Houston Rockets
   'Alperen Sengun':{'team':'Houston Rockets','position':'C'},
-  'Kevin Durant':{'team':'Houston Rockets','position':'F'},      // traded from PHX 2025 offseason
-  'Fred VanVleet':{'team':'Houston Rockets','position':'G'},
-  'Jabari Smith Jr':{'team':'Houston Rockets','position':'F'},
-  'Amen Thompson':{'team':'Houston Rockets','position':'F'},
-  'Tari Eason':{'team':'Houston Rockets','position':'F'},
+  'Jalen Green':{'team':'Houston Rockets','position':'SG'},
+  'Fred VanVleet':{'team':'Houston Rockets','position':'PG'},
+  'Dillon Brooks':{'team':'Houston Rockets','position':'SF'},
+  'Jabari Smith Jr':{'team':'Houston Rockets','position':'PF'},
+  'Amen Thompson':{'team':'Houston Rockets','position':'SF'},
+  'Tari Eason':{'team':'Houston Rockets','position':'PF'},
+  'Steven Adams':{'team':'Houston Rockets','position':'C'},
+  'Aaron Holiday':{'team':'Houston Rockets','position':'PG'},
   // Indiana Pacers
-  'Tyrese Haliburton':{'team':'Indiana Pacers','position':'G'},
-  'Pascal Siakam':{'team':'Indiana Pacers','position':'F'},
-  'Myles Turner':{'team':'Milwaukee Bucks','position':'C'},
-  'Andrew Nembhard':{'team':'Indiana Pacers','position':'G'},
-  'Bennedict Mathurin':{'team':'LA Clippers','position':'G'},
-  'Aaron Nesmith':{'team':'Indiana Pacers','position':'F'},
-  'Obi Toppin':{'team':'Indiana Pacers','position':'F'},
-  'T.J. McConnell':{'team':'Indiana Pacers','position':'G'},
-  'Ben Sheppard':{'team':'Indiana Pacers','position':'F'},
+  'Tyrese Haliburton':{'team':'Indiana Pacers','position':'PG'},
+  'Pascal Siakam':{'team':'Indiana Pacers','position':'PF'},
+  'Myles Turner':{'team':'Indiana Pacers','position':'C'},
+  'Andrew Nembhard':{'team':'Indiana Pacers','position':'PG'},
+  'Bennedict Mathurin':{'team':'Indiana Pacers','position':'SG'},
+  'Aaron Nesmith':{'team':'Indiana Pacers','position':'SF'},
+  'Obi Toppin':{'team':'Indiana Pacers','position':'PF'},
+  'T.J. McConnell':{'team':'Indiana Pacers','position':'PG'},
+  'Isaiah Jackson':{'team':'Indiana Pacers','position':'C'},
+  'Ben Sheppard':{'team':'Indiana Pacers','position':'SF'},
   // LA Clippers
-  'Kawhi Leonard':{'team':'LA Clippers','position':'F'},
-  'James Harden':{'team':'Cleveland Cavaliers','position':'G'},
-  'Ivica Zubac':{'team':'Indiana Pacers','position':'C'},
-  'Norman Powell':{'team':'Miami Heat','position':'G'},
+  'Kawhi Leonard':{'team':'LA Clippers','position':'SF'},
+  'James Harden':{'team':'Cleveland Cavaliers','position':'PG'},
+  'Ivica Zubac':{'team':'LA Clippers','position':'C'},
+  'Norman Powell':{'team':'LA Clippers','position':'SG'},
+  'Russell Westbrook':{'team':'LA Clippers','position':'PG'},
+  'Kevin Porter Jr':{'team':'LA Clippers','position':'SG'},
+  'Bones Hyland':{'team':'LA Clippers','position':'PG'},
   // Los Angeles Lakers
-  'LeBron James':{'team':'Los Angeles Lakers','position':'F'},
-  'Austin Reaves':{'team':'Los Angeles Lakers','position':'G'},
-  'Rui Hachimura':{'team':'Los Angeles Lakers','position':'F'},
-  'Bronny James':{'team':'Los Angeles Lakers','position':'G'},
-  'D\'Angelo Russell':{'team':'Washington Wizards','position':'G'},
-  'Mark Williams':{'team':'Phoenix Suns','position':'C'},        // CHO→LAL(rescinded)→PHX
+  'LeBron James':{'team':'Los Angeles Lakers','position':'SF'},
+  'Anthony Davis':{'team':'Washington Wizards','position':'C'},
+  'Austin Reaves':{'team':'Los Angeles Lakers','position':'SG'},
+  'D\'Angelo Russell':{'team':'Los Angeles Lakers','position':'PG'},
+  'Gabe Vincent':{'team':'Los Angeles Lakers','position':'PG'},
+  'Rui Hachimura':{'team':'Los Angeles Lakers','position':'PF'},
+  'Taurean Prince':{'team':'Los Angeles Lakers','position':'SF'},
+  'Cam Anthony':{'team':'Los Angeles Lakers','position':'SF'},
+  'Bronny James':{'team':'Los Angeles Lakers','position':'PG'},
   // Memphis Grizzlies
-  'Ja Morant':{'team':'Memphis Grizzlies','position':'G'},
-  'Jaren Jackson Jr':{'team':'Utah Jazz','position':'C'},
-  'Desmond Bane':{'team':'Memphis Grizzlies','position':'G'},
-  'Marcus Smart':{'team':'Memphis Grizzlies','position':'G'},
+  'Ja Morant':{'team':'Memphis Grizzlies','position':'PG'},
+  'Jaren Jackson Jr':{'team':'Utah Jazz','position':'PF'},
+  'Desmond Bane':{'team':'Memphis Grizzlies','position':'SG'},
+  'Marcus Smart':{'team':'Los Angeles Lakers','position':'PG'},
   'Zach Edey':{'team':'Memphis Grizzlies','position':'C'},
-  'GG Jackson':{'team':'Memphis Grizzlies','position':'F'},
-  'Santi Aldama':{'team':'Memphis Grizzlies','position':'F'},
-  'Jaylen Wells':{'team':'Memphis Grizzlies','position':'F'},
+  'GG Jackson':{'team':'Memphis Grizzlies','position':'PF'},
+  'Santi Aldama':{'team':'Memphis Grizzlies','position':'PF'},
+  'Jaylen Wells':{'team':'Memphis Grizzlies','position':'SF'},
+  'Luke Kennard':{'team':'Memphis Grizzlies','position':'SG'},
   // Miami Heat
   'Bam Adebayo':{'team':'Miami Heat','position':'C'},
-  'Tyler Herro':{'team':'Miami Heat','position':'G'},
-  'Terry Rozier':{'team':'Miami Heat','position':'G'},
-  'Nikola Jovic':{'team':'Miami Heat','position':'F'},
-  'Jaime Jaquez Jr':{'team':'Miami Heat','position':'F'},
-  'Duncan Robinson':{'team':'Miami Heat','position':'G'},
+  'Tyler Herro':{'team':'Miami Heat','position':'SG'},
+  'Jimmy Butler':{'team':'Miami Heat','position':'SF'},
+  'Terry Rozier':{'team':'Miami Heat','position':'PG'},
+  'Nikola Jovic':{'team':'Miami Heat','position':'PF'},
+  'Jaime Jaquez Jr':{'team':'Miami Heat','position':'SF'},
+  'Kevin Love':{'team':'Miami Heat','position':'C'},
+  'Duncan Robinson':{'team':'Miami Heat','position':'SG'},
   // Milwaukee Bucks
-  'Giannis Antetokounmpo':{'team':'Milwaukee Bucks','position':'F'},
-  'Damian Lillard':{'team':'Milwaukee Bucks','position':'G'},
+  'Giannis Antetokounmpo':{'team':'Milwaukee Bucks','position':'PF'},
+  'Damian Lillard':{'team':'Milwaukee Bucks','position':'PG'},
+  'Khris Middleton':{'team':'Milwaukee Bucks','position':'SF'},
   'Brook Lopez':{'team':'Milwaukee Bucks','position':'C'},
-  'Bobby Portis':{'team':'Milwaukee Bucks','position':'F'},
-  'Malik Beasley':{'team':'Milwaukee Bucks','position':'G'},
-  'Gary Trent Jr':{'team':'Milwaukee Bucks','position':'G'},
+  'Bobby Portis':{'team':'Milwaukee Bucks','position':'PF'},
+  'Patrick Beverley':{'team':'Milwaukee Bucks','position':'PG'},
+  'MarJon Beauchamp':{'team':'Milwaukee Bucks','position':'SF'},
+  'AJ Green':{'team':'Milwaukee Bucks','position':'SG'},
+  'Malik Beasley':{'team':'Milwaukee Bucks','position':'SG'},
+  'Gary Trent Jr':{'team':'Milwaukee Bucks','position':'SG'},
   // Minnesota Timberwolves
   'Karl-Anthony Towns':{'team':'New York Knicks','position':'C'},
-  'Anthony Edwards':{'team':'Minnesota Timberwolves','position':'G'},
+  'Anthony Edwards':{'team':'Minnesota Timberwolves','position':'SG'},
   'Rudy Gobert':{'team':'Minnesota Timberwolves','position':'C'},
-  'Mike Conley':{'team':'Chicago Bulls','position':'G'},
-  'Jaden McDaniels':{'team':'Minnesota Timberwolves','position':'F'},
+  'Mike Conley':{'team':'Minnesota Timberwolves','position':'PG'},
+  'Jaden McDaniels':{'team':'Minnesota Timberwolves','position':'SF'},
   'Naz Reid':{'team':'Minnesota Timberwolves','position':'C'},
-  'Julius Randle':{'team':'Minnesota Timberwolves','position':'F'},
+  'Julius Randle':{'team':'Minnesota Timberwolves','position':'PF'},
   // New Orleans Pelicans
-  'Zion Williamson':{'team':'New Orleans Pelicans','position':'F'},
-  'Brandon Ingram':{'team':'New Orleans Pelicans','position':'F'},
-  'Jordan Poole':{'team':'New Orleans Pelicans','position':'G'}, // WSH→NOP trade
-  'Trey Murphy III':{'team':'New Orleans Pelicans','position':'F'},
-  'Herbert Jones':{'team':'New Orleans Pelicans','position':'F'},
-  'Jose Alvarado':{'team':'New Orleans Pelicans','position':'G'},
-  'Jordan Hawkins':{'team':'New Orleans Pelicans','position':'G'},
+  'Zion Williamson':{'team':'New Orleans Pelicans','position':'PF'},
+  'Brandon Ingram':{'team':'New Orleans Pelicans','position':'SF'},
+  'CJ McCollum':{'team':'New Orleans Pelicans','position':'SG'},
+  'Trey Murphy III':{'team':'New Orleans Pelicans','position':'SF'},
+  'Herbert Jones':{'team':'New Orleans Pelicans','position':'SF'},
+  'Jose Alvarado':{'team':'New Orleans Pelicans','position':'PG'},
+  'Larry Nance Jr':{'team':'New Orleans Pelicans','position':'PF'},
+  'Jordan Hawkins':{'team':'New Orleans Pelicans','position':'SG'},
+  'Daniel Theis':{'team':'New Orleans Pelicans','position':'C'},
   // New York Knicks
-  'Jalen Brunson':{'team':'New York Knicks','position':'G'},
-  'Mikal Bridges':{'team':'New York Knicks','position':'F'},
-  'OG Anunoby':{'team':'New York Knicks','position':'F'},
-  'Josh Hart':{'team':'New York Knicks','position':'F'},
+  'Jalen Brunson':{'team':'New York Knicks','position':'PG'},
+  'Mikal Bridges':{'team':'New York Knicks','position':'SF'},
+  'OG Anunoby':{'team':'New York Knicks','position':'SF'},
+  'Josh Hart':{'team':'New York Knicks','position':'SG'},
   'Mitchell Robinson':{'team':'New York Knicks','position':'C'},
-  'Donte DiVincenzo':{'team':'New York Knicks','position':'G'},
-  'Isaiah Hartenstein':{'team':'New York Knicks','position':'C'},
+  'Donte DiVincenzo':{'team':'New York Knicks','position':'SG'},
+  'Isaiah Hartenstein':{'team':'Oklahoma City Thunder','position':'C'},
+  'Precious Achiuwa':{'team':'New York Knicks','position':'PF'},
   // Oklahoma City Thunder
-  'Shai Gilgeous-Alexander':{'team':'Oklahoma City Thunder','position':'G'},
-  'Jalen Williams':{'team':'Oklahoma City Thunder','position':'G'},
-  'Luguentz Dort':{'team':'Oklahoma City Thunder','position':'G'},
+  'Shai Gilgeous-Alexander':{'team':'Oklahoma City Thunder','position':'PG'},
+  'Jalen Williams':{'team':'Oklahoma City Thunder','position':'SG'},
+  'Luguentz Dort':{'team':'Oklahoma City Thunder','position':'SG'},
   'Chet Holmgren':{'team':'Oklahoma City Thunder','position':'C'},
-  'Alex Caruso':{'team':'Oklahoma City Thunder','position':'G'},
-  'Kenrich Williams':{'team':'Oklahoma City Thunder','position':'F'},
-  'Isaiah Joe':{'team':'Oklahoma City Thunder','position':'G'},
+  'Aaron Wiggins':{'team':'Oklahoma City Thunder','position':'SG'},
+  'Isaiah Joe':{'team':'Oklahoma City Thunder','position':'SG'},
+  'Kenrich Williams':{'team':'Oklahoma City Thunder','position':'SF'},
+  'Ousmane Dieng':{'team':'Oklahoma City Thunder','position':'SF'},
+  'Alex Caruso':{'team':'Oklahoma City Thunder','position':'SG'},
   // Orlando Magic
-  'Paolo Banchero':{'team':'Orlando Magic','position':'F'},
-  'Franz Wagner':{'team':'Orlando Magic','position':'F'},
+  'Paolo Banchero':{'team':'Orlando Magic','position':'PF'},
+  'Franz Wagner':{'team':'Orlando Magic','position':'SF'},
   'Wendell Carter Jr':{'team':'Orlando Magic','position':'C'},
-  'Cole Anthony':{'team':'Orlando Magic','position':'G'},
-  'Markelle Fultz':{'team':'Orlando Magic','position':'G'},
-  'Jalen Suggs':{'team':'Orlando Magic','position':'G'},
-  'Jonathan Isaac':{'team':'Orlando Magic','position':'F'},
+  'Cole Anthony':{'team':'Orlando Magic','position':'PG'},
+  'Markelle Fultz':{'team':'Orlando Magic','position':'PG'},
+  'Jalen Suggs':{'team':'Orlando Magic','position':'PG'},
+  'Gary Harris':{'team':'Orlando Magic','position':'SG'},
+  'Jonathan Isaac':{'team':'Orlando Magic','position':'PF'},
   'Moritz Wagner':{'team':'Orlando Magic','position':'C'},
-  'Anthony Black':{'team':'Orlando Magic','position':'G'},
+  'Anthony Black':{'team':'Orlando Magic','position':'PG'},
   // Philadelphia 76ers
   'Joel Embiid':{'team':'Philadelphia 76ers','position':'C'},
-  'Tyrese Maxey':{'team':'Philadelphia 76ers','position':'G'},
-  'Paul George':{'team':'Philadelphia 76ers','position':'F'},
-  'Kelly Oubre Jr':{'team':'Philadelphia 76ers','position':'F'},
+  'Tyrese Maxey':{'team':'Philadelphia 76ers','position':'PG'},
+  'Paul George':{'team':'Philadelphia 76ers','position':'SF'},
+  'Kelly Oubre Jr':{'team':'Philadelphia 76ers','position':'SF'},
   'Andre Drummond':{'team':'Philadelphia 76ers','position':'C'},
-  'Caleb Martin':{'team':'Philadelphia 76ers','position':'F'},
-  'Kyle Lowry':{'team':'Philadelphia 76ers','position':'G'},
+  'Nicolas Batum':{'team':'Philadelphia 76ers','position':'PF'},
+  'KJ Martin':{'team':'Philadelphia 76ers','position':'PF'},
+  'Kyle Lowry':{'team':'Philadelphia 76ers','position':'PG'},
+  'Caleb Martin':{'team':'Philadelphia 76ers','position':'SF'},
   // Phoenix Suns
-  'Devin Booker':{'team':'Phoenix Suns','position':'G'},
-  'Jalen Green':{'team':'Phoenix Suns','position':'G'},          // HOU→PHX (Durant trade)
-  'Dillon Brooks':{'team':'Phoenix Suns','position':'F'},        // HOU→PHX (Durant trade)
-  'Grayson Allen':{'team':'Phoenix Suns','position':'G'},
-  'Royce O\'Neale':{'team':'Phoenix Suns','position':'F'},
+  'Kevin Durant':{'team':'Houston Rockets','position':'SF'},
+  'Devin Booker':{'team':'Phoenix Suns','position':'SG'},
+  'Bradley Beal':{'team':'Phoenix Suns','position':'SG'},
+  'Jusuf Nurkic':{'team':'Phoenix Suns','position':'C'},
+  'Grayson Allen':{'team':'Phoenix Suns','position':'SG'},
+  'Royce O\'Neale':{'team':'Phoenix Suns','position':'SF'},
+  'Eric Gordon':{'team':'Phoenix Suns','position':'SG'},
+  'Drew Eubanks':{'team':'Phoenix Suns','position':'C'},
   'Bol Bol':{'team':'Phoenix Suns','position':'C'},
   // Portland Trail Blazers
-  'Scoot Henderson':{'team':'Portland Trail Blazers','position':'G'},
+  'Scoot Henderson':{'team':'Portland Trail Blazers','position':'PG'},
+  'Anfernee Simons':{'team':'Portland Trail Blazers','position':'SG'},
   'Deandre Ayton':{'team':'Portland Trail Blazers','position':'C'},
-  'Jerami Grant':{'team':'Portland Trail Blazers','position':'F'},
-  'Shaedon Sharpe':{'team':'Portland Trail Blazers','position':'G'},
-  'Toumani Camara':{'team':'Portland Trail Blazers','position':'F'},
+  'Jerami Grant':{'team':'Portland Trail Blazers','position':'PF'},
+  'Matisse Thybulle':{'team':'Portland Trail Blazers','position':'SG'},
+  'Shaedon Sharpe':{'team':'Portland Trail Blazers','position':'SG'},
+  'Toumani Camara':{'team':'Portland Trail Blazers','position':'SF'},
   'Donovan Clingan':{'team':'Portland Trail Blazers','position':'C'},
   // Sacramento Kings
+  'De\'Aaron Fox':{'team':'Sacramento Kings','position':'PG'},
   'Domantas Sabonis':{'team':'Sacramento Kings','position':'C'},
-  'Keegan Murray':{'team':'Sacramento Kings','position':'F'},
-  'Harrison Barnes':{'team':'Sacramento Kings','position':'F'},
-  'Malik Monk':{'team':'Sacramento Kings','position':'G'},
-  'Keon Ellis':{'team':'Sacramento Kings','position':'G'},
+  'Keegan Murray':{'team':'Sacramento Kings','position':'SF'},
+  'Harrison Barnes':{'team':'Sacramento Kings','position':'SF'},
+  'Malik Monk':{'team':'Sacramento Kings','position':'PG'},
+  'Kevin Huerter':{'team':'Sacramento Kings','position':'SG'},
+  'Trey Lyles':{'team':'Sacramento Kings','position':'PF'},
+  'Alex Len':{'team':'Sacramento Kings','position':'C'},
+  'Keon Ellis':{'team':'Sacramento Kings','position':'SG'},
   // San Antonio Spurs
   'Victor Wembanyama':{'team':'San Antonio Spurs','position':'C'},
-  'De\'Aaron Fox':{'team':'San Antonio Spurs','position':'G'},   // traded from SAC Feb 2025
-  'Devin Vassell':{'team':'San Antonio Spurs','position':'G'},
-  'Keldon Johnson':{'team':'San Antonio Spurs','position':'F'},
-  'Jeremy Sochan':{'team':'San Antonio Spurs','position':'F'},
-  'Tre Jones':{'team':'San Antonio Spurs','position':'G'},
+  'Devin Vassell':{'team':'San Antonio Spurs','position':'SG'},
+  'Keldon Johnson':{'team':'San Antonio Spurs','position':'SF'},
+  'Jeremy Sochan':{'team':'San Antonio Spurs','position':'PF'},
+  'Tre Jones':{'team':'San Antonio Spurs','position':'PG'},
   'Zach Collins':{'team':'San Antonio Spurs','position':'C'},
+  'Julian Champagnie':{'team':'San Antonio Spurs','position':'SF'},
+  'Blake Wesley':{'team':'San Antonio Spurs','position':'PG'},
+  'Malaki Branham':{'team':'San Antonio Spurs','position':'SG'},
   // Toronto Raptors
-  'Scottie Barnes':{'team':'Toronto Raptors','position':'F'},
-  'RJ Barrett':{'team':'Toronto Raptors','position':'G'},
-  'Immanuel Quickley':{'team':'Toronto Raptors','position':'G'},
+  'Scottie Barnes':{'team':'Toronto Raptors','position':'PF'},
+  'RJ Barrett':{'team':'Toronto Raptors','position':'SG'},
+  'Immanuel Quickley':{'team':'Toronto Raptors','position':'PG'},
   'Jakob Poeltl':{'team':'Toronto Raptors','position':'C'},
-  'Gradey Dick':{'team':'Toronto Raptors','position':'G'},
+  'Ochai Agbaji':{'team':'Toronto Raptors','position':'SG'},
+  'Bruce Brown':{'team':'Toronto Raptors','position':'PG'},
+  'Gradey Dick':{'team':'Toronto Raptors','position':'SG'},
+  'Kelly Olynyk':{'team':'Toronto Raptors','position':'C'},
+  'Garrett Temple':{'team':'Toronto Raptors','position':'SG'},
   // Utah Jazz
-  'Lauri Markkanen':{'team':'Utah Jazz','position':'F'},
-  'Jordan Clarkson':{'team':'Utah Jazz','position':'G'},
-  'Collin Sexton':{'team':'Utah Jazz','position':'G'},
-  'John Collins':{'team':'Utah Jazz','position':'F'},
+  'Lauri Markkanen':{'team':'Utah Jazz','position':'PF'},
+  'Jordan Clarkson':{'team':'Utah Jazz','position':'PG'},
+  'Collin Sexton':{'team':'Utah Jazz','position':'PG'},
+  'John Collins':{'team':'Utah Jazz','position':'PF'},
+  'Kris Dunn':{'team':'Utah Jazz','position':'PG'},
   'Walker Kessler':{'team':'Utah Jazz','position':'C'},
-  'Keyonte George':{'team':'Utah Jazz','position':'G'},
+  'Taylor Hendricks':{'team':'Utah Jazz','position':'PF'},
+  'Keyonte George':{'team':'Utah Jazz','position':'PG'},
+  'Brice Sensabaugh':{'team':'Utah Jazz','position':'SG'},
   // Washington Wizards
-  'Anthony Davis':{'team':'Washington Wizards','position':'C'},  // LAL→DAL→WSH
-  'Alexandre Sarr':{'team':'Washington Wizards','position':'C'},
-  'Bilal Coulibaly':{'team':'Washington Wizards','position':'F'},
-  'Corey Kispert':{'team':'Atlanta Hawks','position':'F'},
-  'CJ McCollum':{'team':'Atlanta Hawks','position':'G'},      // from WSH Jan 2026
-  'Deni Avdija':{'team':'Washington Wizards','position':'F'},
-  'Kyle Kuzma':{'team':'Washington Wizards','position':'F'},
+  'Kyle Kuzma':{'team':'Washington Wizards','position':'PF'},
+  'Jordan Poole':{'team':'Washington Wizards','position':'SG'},
+  'Deni Avdija':{'team':'Washington Wizards','position':'SF'},
+  'Tyus Jones':{'team':'Washington Wizards','position':'PG'},
+  'Daniel Gafford':{'team':'Washington Wizards','position':'C'},
   'Marvin Bagley III':{'team':'Washington Wizards','position':'C'},
-  'Patrick Baldwin Jr':{'team':'Washington Wizards','position':'F'},
+  'Corey Kispert':{'team':'Washington Wizards','position':'SF'},
+  'Patrick Baldwin Jr':{'team':'Washington Wizards','position':'SF'},
+  'Alexandre Sarr':{'team':'Washington Wizards','position':'C'},
+  'Bilal Coulibaly':{'team':'Washington Wizards','position':'SF'},
 };
 
 // Common aliases / alternate spellings → canonical name
@@ -2291,26 +2347,16 @@ function updateStatusBar(msg) {
 let liveRoster   = {};   // { "LeBron James": { team, position } }
 let liveSchedule = {};   // { "Los Angeles Lakers": { matchup, game_date, game_time } }
 
-async function fetchLiveRoster(attempt = 1) {
+async function fetchLiveRoster() {
   try {
     const res  = await fetch(`${API_URL}/proxy/roster`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) return;
     const data = await res.json();
     if (data.roster && Object.keys(data.roster).length) {
       liveRoster = data.roster;
-      console.log(`[InjuryWire] ✓ Live roster loaded: ${Object.keys(liveRoster).length} players`);
-    } else {
-      throw new Error('Empty roster response');
+      console.log(`[InjuryWire] Roster loaded: ${Object.keys(liveRoster).length} players`);
     }
-  } catch (e) {
-    console.warn(`[InjuryWire] Roster fetch failed (attempt ${attempt}):`, e.message);
-    // Retry up to 3 times with exponential backoff
-    if (attempt < 3) {
-      await new Promise(r => setTimeout(r, attempt * 3000));
-      return fetchLiveRoster(attempt + 1);
-    }
-    console.warn('[InjuryWire] Using static fallback roster after 3 failed attempts');
-  }
+  } catch (e) { console.warn('[InjuryWire] Roster fetch failed:', e.message); }
 }
 
 async function fetchLiveSchedule() {
@@ -3022,10 +3068,14 @@ function confClass(c) {
 }
 
 function timeAgo(ts) {
-  const d = Math.floor((Date.now() - ts) / 60000);
-  if (d < 1) return 'just now';
-  if (d < 60) return `${d}m ago`;
-  return `${Math.floor(d/60)}h ${d%60}m ago`;
+  const date = ts instanceof Date ? ts : new Date(ts);
+  if (isNaN(date)) return '—';
+  const d = Math.floor((Date.now() - date) / 60000);
+  const rel = d < 1 ? 'just now' : d < 60 ? `${d}m ago` : `${Math.floor(d/60)}h ${d%60}m ago`;
+  const etStr = date.toLocaleTimeString('en-US', {
+    hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'America/New_York'
+  }) + ' ET';
+  return `${rel} · ${etStr}`;
 }
 
 function renderFeed() {
