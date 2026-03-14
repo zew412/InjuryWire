@@ -2773,7 +2773,7 @@ async function loadFromAPI(silent = false) {
   if (!silent) setApiStatus('loading', 'CONNECTING');
   try {
     const res = await fetch(`${API_URL}/v1/injuries/live`, {
-      headers: { 'X-Api-Key': API_KEY, 'Content-Type': 'application/json' }
+      headers: { 'X-Api-Key': API_KEY }
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
