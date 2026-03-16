@@ -548,6 +548,17 @@ header {
   padding: 1px 6px;
   border-radius: 2px;
 }
+.ingame-badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--red);
+  letter-spacing: 2px;
+  border: 1px solid rgba(255,61,90,0.4);
+  background: rgba(255,61,90,0.07);
+  padding: 1px 6px;
+  border-radius: 2px;
+  animation: blink 1.2s infinite;
+}
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
 .player-name {
@@ -2773,7 +2784,7 @@ async function loadFromAPI(silent = false) {
   if (!silent) setApiStatus('loading', 'CONNECTING');
   try {
     const res = await fetch(`${API_URL}/v1/injuries/live`, {
-      headers: { 'X-Api-Key': API_KEY }
+      headers: { 'X-Api-Key': API_KEY, 'Content-Type': 'application/json' }
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
@@ -3321,6 +3332,7 @@ function buildCardContent(r, isNew, expiryMs) {
       <div class="card-header">
         <span class="status-pill ${statusPillClass(r.status)}">${r.status}</span>
         <span class="card-team-tag">${(r.team || '').toUpperCase()}</span>
+        ${r.in_game ? `<span class="ingame-badge">⚡ IN-GAME</span>` : ''}
         ${isNew ? `<span class="new-badge" data-expiry="${expiryMs}">● NEW <span class="new-countdown">${countdownStr}</span></span>` : ''}
       </div>
 
