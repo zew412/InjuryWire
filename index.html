@@ -3218,15 +3218,8 @@ function clearReporterView() {
 
 function fmtGameDate(raw) {
   if (!raw || raw === '—') return '—';
-  // Already human-readable (Tonight, Tomorrow, Sat Mar 15, etc.)
-  if (typeof raw === 'string' && !/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw;
-  // Parse — handle both "2026-03-17" and "2026-03-17T00:00:00.000Z"
-  // Extract just the YYYY-MM-DD part to avoid timezone shifting
-  const datePart = typeof raw === 'string' ? raw.slice(0, 10) : null;
-  if (!datePart || !/^\d{4}-\d{2}-\d{2}$/.test(datePart)) return '—';
-  // Use noon ET to avoid any UTC boundary issues
-  const d = new Date(datePart + 'T12:00:00');
-  if (isNaN(d)) return '—';
+  if (!/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw; // already human-readable
+  const d = new Date(raw + 'T12:00:00');
   const today = new Date();
   const tomorrow = new Date(); tomorrow.setDate(today.getDate() + 1);
   if (d.toDateString() === today.toDateString()) return 'Tonight';
@@ -3258,9 +3251,7 @@ function buildSummaryLine(r) {
   const reporter = r.reporter || '—';
 
   // Corroborator suffix
-  const corrobNames = (r.corroborators || [])
-    .map(c => typeof c === 'object' ? c.name : c)
-    .filter(name => name !== reporter); // don't list the primary reporter as a corroborator
+  const corrobNames = (r.corroborators || []).map(c => typeof c === 'object' ? c.name : c);
   const corrSuffix = corrobNames.length
     ? ` — also confirmed by ${corrobNames.join(', ')}`
     : '';
