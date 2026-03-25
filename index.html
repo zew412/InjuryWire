@@ -3249,9 +3249,9 @@ function buildSummaryLine(r) {
   const pos      = r.position || '—';
   const team     = shortTeamName(r.team);
   const status   = r.status || '—';
-  const injuryRaw = r.injury && r.injury !== 'Injury' ? r.injury : null;
-  const injury   = injuryRaw || 'undisclosed injury';
-  const article  = injuryRaw ? (/^[aeiou]/i.test(injuryRaw) ? 'an' : 'a') : 'an';
+  const injuryRaw = r.injury && r.injury !== 'Injury' && !/^undisclosed$/i.test(r.injury) ? r.injury : null;
+  const injury   = injuryRaw || null;
+  const article  = injuryRaw ? (/^[aeiou]/i.test(injuryRaw) ? 'an' : 'a') : null;
   const matchup  = r.matchup || '—';
   const day      = fmtGameDate(r.game_date);
   const time     = fmtGameTime(r.game_time);
@@ -3270,7 +3270,7 @@ function buildSummaryLine(r) {
     : 'for <strong>—</strong>';
 
   return `<strong>${player}</strong> (${pos}, ${team}) is <strong>${status.toUpperCase()}</strong> `
-       + `${gameStr} with ${article} <strong>${injury}</strong>, `
+       + `${gameStr}${injury ? ` with ${article} <strong>${injury}</strong>` : ''}, `
        + `per <strong>${reporter}</strong>${corrSuffix}.`;
 }
 
