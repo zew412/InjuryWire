@@ -1353,6 +1353,18 @@ header {
   .player-name { font-size: 22px; }
   header { padding: 0 14px; gap: 12px; }
 }
+
+/* ── OFFICIAL REPORT BADGE ── */
+.official-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 8px; font-weight: 700;
+  letter-spacing: 1px; color: #00e676;
+  background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.25);
+  padding: 2px 6px; border-radius: 3px;
+}
+.official-badge::before { content: '✓'; }
+
+
 </style>
 </head>
 <body>
@@ -1610,6 +1622,63 @@ const DEMO_REPORTS = [
   {player:"Pascal Siakam",team:"Indiana Pacers",injury:"Groin tightness",body:"groin",status:"Game-Time Decision",confidence:0.77,reporter:"Dustin Dopirak",handle:"@DustinDopirak",outlet:"The Athletic",tier:1,tweet:"Siakam is a game-time decision with groin tightness. He went through individual work but sat out team drills. Pacers expect to know more by warmups.",minsAgo:167,corroborators:[]},
   {player:"Anthony Davis",team:"Los Angeles Lakers",injury:"Lower back",body:"back",status:"Out",confidence:0.98,reporter:"Dave McMenamin",handle:"@mcten",outlet:"ESPN",tier:1,tweet:"Anthony Davis will not play tonight due to lower back soreness. He was ruled out this afternoon. No structural concern, but the Lakers are prioritizing caution with their upcoming schedule.",minsAgo:175,corroborators:["Mike Trudell","Ohm Youngmisuk"]},
 ];
+
+// ─── OFFICIAL REPORT ──────────────────────────────────────────────────────────
+let officialReport = {};   // { "player name lowercase": entry } — used for badge lookup
+
+async function fetchOfficialReport() {
+  try {
+    const res  = await fetch(`${API_URL}/nba/injuries`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.entries?.length) return;
+
+    // Build lookup map for badge display on tweet cards
+    officialReport = {};
+    for (const e of data.entries) officialReport[e.player.toLowerCase()] = e;
+
+    // Players with tweet cards get the OFFICIAL badge instead of a duplicate card
+    const tweetPlayers = new Set(
+      allReports.filter(r => r.source !== 'official').map(r => r.player?.toLowerCase())
+    );
+
+    const officialCards = data.entries
+      .filter(e => !tweetPlayers.has(e.player.toLowerCase()))
+      .map(e => ({
+        id:                  `official_${e.player.replace(/\s+/g,'_')}_${e.team}`,
+        source:              'official',
+        player:              e.player,
+        team:                e.team,
+        status:              e.current_status,
+        prev_status:         e.previous_status || null,
+        injury:              e.reason || '',
+        body_part:           e.reason ? e.reason.split(' - ')[0] : '',
+        injury_type:         '',
+        matchup:             e.matchup || '',
+        game_time:           e.game_time || '',
+        reporter:            'NBA Official',
+        handle:              '',
+        outlet:              'NBA.com',
+        tier:                1,
+        confidence:          95,
+        timestamp:           new Date(data.fetched_at).getTime(),
+        tweetId:             null,
+        tweetUrl:            e.report_url || '',   // PDF link
+        tweet:               e.reason || '',
+        corroborators:       [],
+        days_since_last_report: null,
+        in_game:             false,
+        position:            '',
+      }));
+
+    // Replace previous official cards, add new ones
+    allReports = allReports.filter(r => r.source !== 'official');
+    allReports.push(...officialCards);
+    allReports.sort((a, b) => b.timestamp - a.timestamp);
+
+    applyFilters();
+  } catch (e) { console.warn('[Official] Fetch failed:', e.message); }
+}
 
 // ─── API CONFIG ───────────────────────────────────────────────────────────────
 const API_URL = 'https://injurywire-pipeline-production.up.railway.app';
@@ -2716,13 +2785,16 @@ function init() {
   setInterval(updateTimestamps, 1000);
   if (API_URL) {
     // Fetch roster + schedule first, then load injury data
-    Promise.all([fetchLiveRoster(), fetchLiveSchedule()]).then(() => {
-      loadData();
+    Promise.all([fetchLiveRoster(), fetchLiveSchedule()]).then(async () => {
+      await loadData();
+      // Official report loads after DB data so it doesn't get overwritten
+      fetchOfficialReport();
       // Re-fetch roster/schedule every 6 hours
       setInterval(fetchLiveRoster,   6 * 3600000);
-      setInterval(fetchLiveSchedule, 3600000);       // schedule every hour
+      setInterval(fetchLiveSchedule, 3600000);
     });
     setInterval(() => loadData(true), POLL_MS);
+    setInterval(fetchOfficialReport, 5 * 60 * 1000);
   } else {
     loadData();
   }
@@ -2806,7 +2878,14 @@ async function loadFromAPI(silent = false) {
           }
         }
       });
+      // Save official cards before overwriting so polling refreshes don't wipe them
+      const savedOfficial = allReports.filter(r => r.source === 'official');
       allReports = mapped;
+      // Restore official cards (deduped by player name)
+      if (savedOfficial.length) {
+        const tweetPlayers = new Set(mapped.map(r => r.player?.toLowerCase()));
+        allReports.push(...savedOfficial.filter(r => !tweetPlayers.has(r.player?.toLowerCase())));
+      }
       // Scan each raw record for additional players mentioned in the same tweet
       supplementMultiPlayerCards(data.injuries || []);
     }
@@ -3308,10 +3387,10 @@ function buildCardContent(r, isNew, expiryMs) {
   const secsLeft = isNew ? Math.max(0, Math.ceil(((expiryMs||0) - Date.now()) / 1000)) : 0;
   const countdownStr = `${Math.floor(secsLeft / 60)}:${String(secsLeft % 60).padStart(2, '0')}`;
 
-  // ── Tweet X link (primary reporter)
+  // ── Tweet X link (primary reporter) — for official cards this is the PDF link
   const rawHandle = (r.handle || '').replace('@', '');
   const tweetId   = r.tweetId || r.source_id || '';
-  const tweetXUrl = (rawHandle && tweetId) ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
+  const tweetXUrl = r.tweetUrl || ((rawHandle && tweetId) ? `https://x.com/${rawHandle}/status/${tweetId}` : '');
 
   // ── Corroborators with X profile links
   const corrobArr = (r.corroborators || []);
@@ -3342,26 +3421,37 @@ function buildCardContent(r, isNew, expiryMs) {
         <span class="status-pill ${statusPillClass(r.status)}">${r.status}</span>
         <span class="card-team-tag">${(r.team || '').toUpperCase()}</span>
         ${r.in_game ? `<span class="ingame-badge">⚡ IN-GAME</span>` : ''}
+        ${r.source !== 'official' && officialReport[(r.player||'').toLowerCase()] ? `<span class="official-badge">OFFICIAL</span>` : ''}
         ${isNew ? `<span class="new-badge" data-expiry="${expiryMs}">● NEW <span class="new-countdown">${countdownStr}</span></span>` : ''}
       </div>
 
       <div class="player-name">${(r.player || '—').toUpperCase()}</div>
 
       <div class="intel-box" style="border-left-color:${{Out:'var(--red)',Doubtful:'#ff8fa3',Questionable:'var(--orange)','Game-Time Decision':'var(--yellow)',Probable:'var(--green)'}[r.status]||'var(--border2)'}">
-        <div class="intel-box-text">${buildSummaryLine(r)}</div>
+        <div class="intel-box-text">${r.source === 'official' ? (r.injury || r.tweet || '—') : buildSummaryLine(r)}</div>
       </div>
 
       <div class="sources-block">
-        <div class="primary-source">
-          <div class="ps-avatar">${(r.handle || '@@').slice(1,3).toUpperCase()}</div>
-          <div class="ps-info">
-            <div class="ps-name">${r.reporter || '—'}</div>
-            <div class="ps-meta">${r.handle || ''} · ${(r.outlet || '').split('/')[0].trim()} · <span class="ps-tier-badge">TIER ${r.tier || '—'}</span></div>
-          </div>
-          ${tweetXUrl
-            ? `<a class="ps-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View original tweet">𝕏 SOURCE</a>`
-            : `<span class="ps-x-link" style="opacity:0.3;cursor:default">𝕏 SOURCE</span>`}
-        </div>
+        ${(() => {
+          if (r.source === 'official') {
+            return `<div class="primary-source">
+              <div class="ps-avatar" style="color:var(--green);border-color:rgba(0,230,118,0.25)">NBA</div>
+              <div class="ps-info">
+                <div class="ps-name">NBA Official Report</div>
+                <div class="ps-meta">official.nba.com · <span class="ps-tier-badge">OFFICIAL</span></div>
+              </div>
+              ${tweetXUrl ? `<a class="ps-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">PDF ↗</a>` : `<span class="ps-x-link" style="opacity:0.3;cursor:default">PDF ↗</span>`}
+            </div>`;
+          }
+          return `<div class="primary-source">
+            <div class="ps-avatar">${(r.handle || '@@').slice(1,3).toUpperCase()}</div>
+            <div class="ps-info">
+              <div class="ps-name">${r.reporter || '—'}</div>
+              <div class="ps-meta">${r.handle || ''} · ${(r.outlet || '').split('/')[0].trim()} · <span class="ps-tier-badge">TIER ${r.tier || '—'}</span></div>
+            </div>
+            ${tweetXUrl ? `<a class="ps-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">𝕏 SOURCE</a>` : `<span class="ps-x-link" style="opacity:0.3;cursor:default">𝕏 SOURCE</span>`}
+          </div>`;
+        })()}
         ${corrHtml}
       </div>
 
