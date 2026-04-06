@@ -3404,7 +3404,9 @@ function buildCardContent(r, isNew, expiryMs) {
           </div>
           ${tweetXUrl
             ? `<a class="ps-x-link" href="${tweetXUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="View original tweet">𝕏 SOURCE</a>`
-            : (r.source === 'official' ? `<span class="ps-x-link official-link">PDF ↗</span>` : `<span class="ps-x-link" style="opacity:0.3;cursor:default">𝕏 SOURCE</span>`)}
+            : (r.source === 'official' && r.report_url
+                ? `<a class="ps-x-link official-link" href="${r.report_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">PDF ↗</a>`
+                : `<span class="ps-x-link" style="opacity:0.3;cursor:default">𝕏 SOURCE</span>`)}
         </div>
         ${corrHtml}
       </div>
