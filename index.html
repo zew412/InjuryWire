@@ -3333,7 +3333,7 @@ function buildCardContent(r, isNew, expiryMs) {
   // ── Tweet X link (primary reporter)
   const rawHandle = (r.handle || '').replace('@', '');
   const tweetId   = r.tweetId || r.source_id || '';
-  const tweetXUrl = (rawHandle && tweetId) ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
+  const tweetXUrl = (rawHandle && tweetId && r.source !== 'official') ? `https://x.com/${rawHandle}/status/${tweetId}` : '';
 
   // ── All linked tweets (primary + corroborators from corrobTweets)
   const allTweets = (r.corrobTweets && r.corrobTweets.length > 0)
